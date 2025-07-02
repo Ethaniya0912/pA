@@ -24,6 +24,11 @@ public class PlayerLocomotionManager : LocomotionManager
 
     public void HandleAllMovement()
     {
+        HandleGroundMovement();
+    }
+
+    private void HandleGroundMovement()
+    {
         // moveDirection 벡터에 움직임 산입하기.
         // 움직임은 카메라이 가리키는 방향을 기준, 인풋의 산입에 의해 결정됨.
         moveDirection = PlayerCamera.Instance.transform.forward * verticalMovement;
@@ -35,6 +40,7 @@ public class PlayerLocomotionManager : LocomotionManager
         if (InputHandler.Instance.moveAmount > 0.5f)
         {
             // 달리는 속도로 설정.
+            //player.chacterController
 
         }
         else if (InputHandler.Instance.moveAmount >= 0.5f)

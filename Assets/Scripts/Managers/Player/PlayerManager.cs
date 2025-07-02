@@ -2,7 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : CharacterManager
 {
+    // 플레이어매니저 관련 초기화//
+    PlayerLocomotionManager playerLocomotionManager;
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        // 캐릭터이외 플레이어만을 위한 것.
+
+        playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        // 움직임 조작
+        playerLocomotionManager.HandleAllMovement();
+    }
 }
