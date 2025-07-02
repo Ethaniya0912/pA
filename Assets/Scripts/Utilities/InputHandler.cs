@@ -1,17 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
     public static InputHandler Instance;
     [SerializeField] Vector2 movementInput;
 
-    PlayerController playercontroller;
+    PlayerControls playerController;
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            Instance.enabled = true;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     private void OnDestroy()
     {
@@ -19,11 +28,13 @@ public class InputHandler : MonoBehaviour
     }
     private void OnEnable()
     {
-        if(Instance == null)
-        {
-            playercontroller = new PlayerController();
-            playercontroller.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
-        }
-        playercontroller.Enable();
+/*        if(Instance == null)
+        {*/
+            Debug.Log("Instance is Null");
+            playerController = new PlayerControls();
+            playerController.PlayerControlz.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+/*        }*/
+        Debug.Log("Instance is not null");
+        playerController.Enable();
     }
 }
