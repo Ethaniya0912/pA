@@ -13,8 +13,8 @@ public class InputHandler : MonoBehaviour
 
     //플레이어 움직임//
     [SerializeField] Vector2 movementInput;
-    [SerializeField] float verticalInput;
-    [SerializeField] float horizontalInput;
+    public float verticalInput;
+    public float horizontalInput;
     public float moveAmount;
 
     //플레이어 액션//

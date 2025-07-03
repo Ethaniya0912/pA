@@ -29,8 +29,8 @@ public class PlayerLocomotionManager : LocomotionManager
 
     private void GetVerticalAndHorizontalInputs()
     {
-        //verticalMovement = InputHandler.Instance.verticalInput;
-        //horizontalMovement = InputHandler.Instance.horizontalInput;
+        verticalMovement = InputHandler.Instance.verticalInput;
+        horizontalMovement = InputHandler.Instance.horizontalInput;
 
         // 무브번트 클램핑 하기.
     }
@@ -55,7 +55,7 @@ public class PlayerLocomotionManager : LocomotionManager
             player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
 
         }
-        else if (InputHandler.Instance.moveAmount >= 0.5f)
+        else if (InputHandler.Instance.moveAmount <= 0.5f)
         {
             // 걷는 속도로 설정.
             Debug.Log("0.5수준");
