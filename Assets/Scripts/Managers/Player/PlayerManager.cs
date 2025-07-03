@@ -7,6 +7,7 @@ public class PlayerManager : CharacterManager
     // 플레이어매니저 관련 초기화//
     PlayerLocomotionManager playerLocomotionManager;
     CombatManager combatManager;
+    StatsManager statsManager;
 
     protected override void Awake()
     {
@@ -16,6 +17,7 @@ public class PlayerManager : CharacterManager
 
         playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
         combatManager = GetComponent<CombatManager>();
+        statsManager = GetComponent<StatsManager>();
 
     }
 
@@ -26,5 +28,6 @@ public class PlayerManager : CharacterManager
         // 움직임 조작
         playerLocomotionManager.HandleAllMovement();
         combatManager.HandleAllCombat();
+        statsManager.HandleAllStats();
     }
 }
