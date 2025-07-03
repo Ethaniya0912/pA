@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    public void Attack()
+    StatsManager statsManager;
+
+    public void HandleAllCombat()
     {
-        statsManager.TakeDamage(1.0f);
-        Debug.Log("Enemy : Attack!");
+        Attack();
+    }
+    private void Attack()
+    {
+        /*statsManager.TakeDamage(1.0f);*/
+        if (InputHandler.Instance.LeftClickInput)
+        {
+            Debug.Log("Enemy : Attack!");
+        }
     }
 }

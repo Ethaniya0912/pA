@@ -18,7 +18,7 @@ public class InputHandler : MonoBehaviour
     public float moveAmount;
 
     //플레이어 액션//
-    [SerializeField] bool LeftClickInput;
+    public bool LeftClickInput;
 
     // 인풋 액션맵
     PlayerControls playerController;
@@ -86,7 +86,7 @@ public class InputHandler : MonoBehaviour
         if (LeftClickInput)
         {
             LeftClickInput = false;
-
+            Debug.Log("LeftClicked!");
             // TODO: UI 윈도우가 열려있다면, 아무것도 안함.
         }
     }

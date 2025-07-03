@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
-    protected CharacterController characterController;
+    public CharacterController characterController;
 
     protected virtual void Awake()
     {

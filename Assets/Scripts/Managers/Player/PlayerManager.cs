@@ -6,6 +6,7 @@ public class PlayerManager : CharacterManager
 {
     // 플레이어매니저 관련 초기화//
     PlayerLocomotionManager playerLocomotionManager;
+    CombatManager combatManager;
 
     protected override void Awake()
     {
@@ -14,6 +15,8 @@ public class PlayerManager : CharacterManager
         // 캐릭터이외 플레이어만을 위한 것.
 
         playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
+        combatManager = GetComponent<CombatManager>();
+
     }
 
     protected override void Update()
@@ -22,5 +25,6 @@ public class PlayerManager : CharacterManager
 
         // 움직임 조작
         playerLocomotionManager.HandleAllMovement();
+        combatManager.HandleAllCombat();
     }
 }

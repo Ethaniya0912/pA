@@ -11,8 +11,8 @@ public class PlayerLocomotionManager : LocomotionManager
 
     private Vector3 moveDirection;
     // 아래 speed 에 따라 애니메이션이 결정됨.
-    [SerializeField] float walkingSpeed;
-    [SerializeField] float runningSpeed;
+    [SerializeField] float walkingSpeed = 2;
+    [SerializeField] float runningSpeed = 5;
 
     protected override void Awake()
     {
@@ -27,8 +27,19 @@ public class PlayerLocomotionManager : LocomotionManager
         HandleGroundMovement();
     }
 
+    private void GetVerticalAndHorizontalInputs()
+    {
+        //verticalMovement = InputHandler.Instance.verticalInput;
+        //horizontalMovement = InputHandler.Instance.horizontalInput;
+
+        // 무브번트 클램핑 하기.
+    }
+
     private void HandleGroundMovement()
     {
+        // 나중에 애니메이션관련 처리.
+        GetVerticalAndHorizontalInputs();
+
         // moveDirection 벡터에 움직임 산입하기.
         // 움직임은 카메라이 가리키는 방향을 기준, 인풋의 산입에 의해 결정됨.
         moveDirection = PlayerCamera.Instance.transform.forward * verticalMovement;
@@ -40,12 +51,15 @@ public class PlayerLocomotionManager : LocomotionManager
         if (InputHandler.Instance.moveAmount > 0.5f)
         {
             // 달리는 속도로 설정.
-            //player.chacterController
+            Debug.Log("0.5이상");
+            player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
 
         }
         else if (InputHandler.Instance.moveAmount >= 0.5f)
         {
             // 걷는 속도로 설정.
+            Debug.Log("0.5수준");
+            player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
         }
     }
 }
