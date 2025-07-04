@@ -564,12 +564,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146f7b2b1c9824e4a88fa9cb05086ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 10
-  currentHealth: 0
+  maxHealth: 100
   maxStamina: 10
+  maxFood: 100
+  currentHealth: 0
   currentStamina: 0
+  currentFood: 0
+  currentShield: 0
+  currentArmor: 0
+  currentStrength: 0
+  currentCriticalChance: 0
+  currentAttackSpeed: 0
+  currentSpeed: 0
+  currentMaxHit: 0
   HpGenerationRate: 0.01
   StaminaGenerationRate: 0.01
+  FoodDecreaseRate: 0.1
   isDead: 0
 --- !u!114 &1179117834
 MonoBehaviour:
@@ -622,6 +632,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 0}
+  animator: {fileID: 0}
+  playerAnimatorManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
   combatManager: {fileID: 0}
   statsManager: {fileID: 0}
@@ -643,6 +655,39 @@ MonoBehaviour:
   walkingSpeed: 2
   runningSpeed: 5
   isDodge: 0
+--- !u!114 &1179117838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179117831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6868ee3dae2448d408a7ef75ef30e6b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &1179117839
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179117831}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 5ca5ab1480bd4724d9f2b6d8333edbff, type: 3}
+  m_Controller: {fileID: 9100000, guid: f99fd279689123c42a9b53dc631d4aa2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1448408844
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,6 +946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!4 &1928316422
 Transform:
   m_ObjectHideFlags: 0
@@ -991,6 +1037,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1179117833}
+    - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1179117838}
+    - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1179117839}
   m_SourcePrefab: {fileID: 100100000, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

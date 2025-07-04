@@ -81,7 +81,7 @@ public class InputHandler : MonoBehaviour
             moveAmount = 1;
         }
 
-        
+        player.playerAnimatorManager.UpdateAnimatorMovementParameters(horizontalInput, verticalInput);
     }
 
     // 액션관련 //

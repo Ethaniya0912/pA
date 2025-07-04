@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
-    public CharacterController characterController;
+    [HideInInspector] public CharacterController characterController;
+    [HideInInspector] public Animator animator;
 
     protected virtual void Awake()
     {
@@ -13,6 +14,7 @@ public class CharacterManager : MonoBehaviour
 
         // 컨트롤러 컴포넌트 가져오기.
         characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
