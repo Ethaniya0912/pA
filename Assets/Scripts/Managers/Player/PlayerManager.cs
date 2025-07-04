@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerManager : CharacterManager
 {
     // 플레이어매니저 관련 초기화//
-    PlayerLocomotionManager playerLocomotionManager;
-    CombatManager combatManager;
-    StatsManager statsManager;
+    public PlayerLocomotionManager playerLocomotionManager;
+    public CombatManager combatManager;
+    public StatsManager statsManager;
 
     protected override void Awake()
     {
@@ -18,6 +18,8 @@ public class PlayerManager : CharacterManager
         playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
         combatManager = GetComponent<CombatManager>();
         statsManager = GetComponent<StatsManager>();
+
+        InputHandler.Instance.player = this;
 
     }
 

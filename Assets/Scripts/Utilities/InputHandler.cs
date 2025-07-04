@@ -18,6 +18,7 @@ public class InputHandler : MonoBehaviour
     public float moveAmount;
 
     //플레이어 액션//
+    public bool DashInput = false;
     public bool LeftClickInput;
 
     // 인풋 액션맵
@@ -47,6 +48,7 @@ public class InputHandler : MonoBehaviour
             Debug.Log("Instance is Null");
             playerController = new PlayerControls();
             playerController.PlayerControlz.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+            playerController.PlayerActions.Dash.performed += i => DashInput = true;
             playerController.PlayerActions.LeftClick.performed += i => LeftClickInput = true;
 /*        }*/
         Debug.Log("Instance is not null");
@@ -57,6 +59,7 @@ public class InputHandler : MonoBehaviour
     {
         HandleMovementInput();
         HandleLeftClickInput();
+        HandleDashInput();
     }
 
     private void HandleMovementInput()
@@ -81,11 +84,22 @@ public class InputHandler : MonoBehaviour
         
     }
 
+    // 액션관련 //
+    private void HandleDashInput()
+    {
+        if (DashInput)
+        {
+            DashInput = false;
+            player.playerLocomotionManager.AttemptToDodgeAction();
+        }
+        
+    }
+
     private void HandleLeftClickInput()
     {
         if (LeftClickInput)
         {
-            LeftClickInput = false;
+            //LeftClickInput = false;
             Debug.Log("LeftClicked!");
             // TODO: UI 윈도우가 열려있다면, 아무것도 안함.
         }

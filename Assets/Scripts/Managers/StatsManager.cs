@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class StatsManager : MonoBehaviour
 {
+    PlayerManager player;
+
+    //스탯관련//
     public float maxHp = 10f;
     public float currentHealth = 0f;
     public float maxStamina = 10f;
@@ -12,10 +15,13 @@ public class StatsManager : MonoBehaviour
     public float HpGenerationRate = 0.01f; // Health regeneration rate per second
     public float StaminaGenerationRate = 0.01f; // Stamina regeneration rate per second
     public bool isDead = false;
+
     void Start()
     {
         currentHealth = maxHp;
         currentStamina = maxStamina;
+
+        player = GetComponent<PlayerManager>();
     }
 
     public void HandleAllStats()
@@ -37,8 +43,9 @@ public class StatsManager : MonoBehaviour
     public void UpdatePlayerStats()
     {
         //점프나 대시할때 스테미나 감소
-        if (InputHandler.Instance.LeftClickInput)
+        if (player.playerLocomotionManager.isDodge == true)
         {
+            player.playerLocomotionManager.isDodge = false;
             Debug.Log("Player : Dash");
             Debug.Log(currentStamina);
             currentStamina -= 1f;

@@ -12,7 +12,11 @@ public class PlayerLocomotionManager : LocomotionManager
     private Vector3 moveDirection;
     // 아래 speed 에 따라 애니메이션이 결정됨.
     [SerializeField] float walkingSpeed = 2;
-    [SerializeField] float runningSpeed = 5;
+    [SerializeField] float runningSpeed = 2;
+
+    // 액션불 //
+    public bool isDodge = false;
+
 
     protected override void Awake()
     {
@@ -25,6 +29,7 @@ public class PlayerLocomotionManager : LocomotionManager
     public void HandleAllMovement()
     {
         HandleGroundMovement();
+        //AttemptToDodgeAction();
     }
 
     private void GetVerticalAndHorizontalInputs()
@@ -61,5 +66,10 @@ public class PlayerLocomotionManager : LocomotionManager
             Debug.Log("0.5수준");
             player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
         }
+    }
+
+    public void AttemptToDodgeAction()
+    {
+        isDodge = true;
     }
 }
