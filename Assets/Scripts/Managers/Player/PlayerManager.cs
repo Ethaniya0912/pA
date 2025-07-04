@@ -19,9 +19,13 @@ public class PlayerManager : CharacterManager
         combatManager = GetComponent<CombatManager>();
         statsManager = GetComponent<StatsManager>();
 
-        InputHandler.Instance.player = this;
-
     }
+
+    private void Start()
+    {
+        InputHandler.Instance.player = this;
+    }
+
 
     protected override void Update()
     {
