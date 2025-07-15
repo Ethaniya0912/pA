@@ -20,6 +20,7 @@ public class InputHandler : MonoBehaviour
     //플레이어 액션//
     public bool DashInput = false;
     public bool LeftClickInput;
+    public bool TabInput;
 
     // 인풋 액션맵
     PlayerControls playerController;
@@ -50,7 +51,8 @@ public class InputHandler : MonoBehaviour
             playerController.PlayerControlz.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
             playerController.PlayerActions.Dash.performed += i => DashInput = true;
             playerController.PlayerActions.LeftClick.performed += i => LeftClickInput = true;
-/*        }*/
+            playerController.PlayerActions.Tab.performed += i => TabInput = true;
+        /*        }*/
         Debug.Log("Instance is not null");
         playerController.Enable();
     }
@@ -60,6 +62,7 @@ public class InputHandler : MonoBehaviour
         HandleMovementInput();
         HandleLeftClickInput();
         HandleDashInput();
+        HandleTabInput();
     }
 
     private void HandleMovementInput()
@@ -99,9 +102,20 @@ public class InputHandler : MonoBehaviour
     {
         if (LeftClickInput)
         {
-            //LeftClickInput = false;
             Debug.Log("LeftClicked!");
+            LeftClickInput = false;
             // TODO: UI 윈도우가 열려있다면, 아무것도 안함.
+
         }
     }
+
+    private void HandleTabInput()
+    {
+        if (TabInput)
+        {
+            Debug.Log("TabPressed!");
+            TabInput = false;
+        }
+    }
+
 }

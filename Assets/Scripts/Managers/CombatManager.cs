@@ -15,7 +15,7 @@ public class CombatManager : MonoBehaviour
         /*statsManager.TakeDamage(1.0f);*/
         if (InputHandler.Instance.LeftClickInput)
         {
-            Debug.Log("Enemy : Attack!");
+            //Debug.Log("Enemy : Attack!");
         }
     }
 }

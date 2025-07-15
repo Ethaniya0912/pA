@@ -56,14 +56,14 @@ public class PlayerLocomotionManager : LocomotionManager
         if (InputHandler.Instance.moveAmount > 0.5f)
         {
             // 달리는 속도로 설정.
-            Debug.Log("0.5이상");
+            //Debug.Log("0.5이상");
             player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
 
         }
         else if (InputHandler.Instance.moveAmount <= 0.5f)
         {
             // 걷는 속도로 설정.
-            Debug.Log("0.5수준");
+            //Debug.Log("0.5수준");
             player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
         }
     }
