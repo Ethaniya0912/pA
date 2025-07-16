@@ -113,7 +113,7 @@ public class InputHandler : MonoBehaviour
     {
         if (TabInput)
         {
-            Debug.Log("TabPressed!");
+            //Debug.Log("TabPressed!");
             TabInput = false;
         }
     }

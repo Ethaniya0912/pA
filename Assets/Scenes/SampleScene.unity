@@ -1908,6 +1908,7 @@ MonoBehaviour:
   playerLocomotionManager: {fileID: 0}
   combatManager: {fileID: 0}
   statsManager: {fileID: 0}
+  inventoryManager: {fileID: 0}
 --- !u!114 &1179117837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1971,6 +1972,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cd9f8e7df4796469651e4367aa2097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemApple: {fileID: 11400000, guid: a50b4d79d165e7a4ebc8bfe085904aa4, type: 2}
+  inventoryPanel: {fileID: 1216026511}
+  equipPanel: {fileID: 1274905630}
+  craftingPanel: {fileID: 723716313}
+  quickSlotPanel: {fileID: 2001141228}
   inventoryGrid: {fileID: 1216026513}
   slotUIPrefab: {fileID: -485053287729008853, guid: 4b554b22ab82b594eaccabb6d618cef3, type: 3}
   equipSlotUIs: []
@@ -2716,6 +2722,7 @@ MonoBehaviour:
   moveAmount: 0
   DashInput: 0
   LeftClickInput: 0
+  TabInput: 0
 --- !u!4 &1710691090
 Transform:
   m_ObjectHideFlags: 0

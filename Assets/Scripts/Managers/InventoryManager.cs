@@ -58,7 +58,8 @@ public class InventoryManager : MonoBehaviour
     }
     public void HandleAllInventorys()
     {
-        AddItemApple();
+        AddItemApple(); //Test 용 아이템 추가
+        HandleTabInput(); //Tab키 입력시 Inventory 토글
     }
 
     private void InitializeGridLayout()
@@ -273,7 +274,7 @@ public class InventoryManager : MonoBehaviour
         foreach (var slotUI in equipSlotUIs) slotUI.UpdateUI();
         foreach (var slotUI in quickSlotUIs) slotUI.UpdateUI();
         foreach (var slotUI in craftingSlotUIs) slotUI.UpdateUI();
-        resultSlotUI.UpdateUI();
+        if(resultSlotUI !=null) resultSlotUI.UpdateUI();
     }
 
     private void AddItemApple()
@@ -283,6 +284,26 @@ public class InventoryManager : MonoBehaviour
             Debug.Log("you took apple");
             AddItem(itemApple,1);
             Debug.Log(inventorySlots);
+        }
+    }
+    private void HandleTabInput()
+    {
+        if (InputHandler.Instance.TabInput)
+        {
+            ToggleInventory();
+        }
+    }
+    private void ToggleInventory()
+    {
+        isInventoryOpen = !isInventoryOpen;
+        Debug.Log(isInventoryOpen ? "Inventory Open" : "Inventory Close");
+        inventoryPanel.SetActive(isInventoryOpen);
+        equipPanel.SetActive(isInventoryOpen);
+        craftingPanel.SetActive(isInventoryOpen);
+        //quickSlotPanel.SetActive(isInventoryOpen);
+        if (isInventoryOpen)
+        {
+            UpdateUI();
         }
     }
 }
