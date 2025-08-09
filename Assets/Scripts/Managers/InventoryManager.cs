@@ -129,6 +129,7 @@ public class InventoryManager : MonoBehaviour
             for (int j = 0; j < inventoryCols; j++)
             {
                 SlotUI slotUI = Instantiate(slotUIPrefab, inventoryGrid.transform);
+                slotUI.transform.name = $"InventorySlot_{i}_{j}";
                 Debug.Log(slotUI);
                 slotUI.Initialize(this, inventorySlots[i, j], SlotUI.SlotType.Inventory, -1, new Vector2Int(i, j));
             }
@@ -256,6 +257,7 @@ public class InventoryManager : MonoBehaviour
                 if (inventorySlots[i, j].IsEmpty)
                 {
                     inventorySlots[i, j].SetItem(item, quantity);
+                    Debug.Log(inventorySlots[i, j].item); // item 추가되었는지 확인
                     UpdateUI();
                     return true;
                 }
@@ -283,7 +285,6 @@ public class InventoryManager : MonoBehaviour
         {
             Debug.Log("you took apple");
             AddItem(itemApple,1);
-            Debug.Log(inventorySlots);
         }
     }
     private void HandleTabInput()

@@ -68,6 +68,16 @@ public class SlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         }
         itemIcon.enabled = true; // 아이콘 활성화
         itemIcon.sprite = slot.item.icon; // 아이콘 스프라이트 갱신
+        if (1 == 1)
+        {
+            Debug.Log(
+                $"UpdateUI: Setting icon for {slot.item.itemName} in {gameObject.name}\n" +
+                $"UpdateUI: Setting quantity for {slot.quantity} in {gameObject.name}\n" +
+                $"UpdateUI: Slot Type: {slotType}, Index: {slotIndex}, Grid Position: {inventoryGridPos}\n"+
+                $"UpdateUI: Slot Data - IsEmpty: {slot.IsEmpty}, Item: {slot.item?.itemName}, Quantity: {slot.quantity}\n"+
+                $"UpdateUI: Item Icon: {itemIcon.sprite?.name}, Quantity Text: {quantityText.text}"
+                );
+        }
         quantityText.text = slot.quantity > 1 ? slot.quantity.ToString() : "";
     }
 }
