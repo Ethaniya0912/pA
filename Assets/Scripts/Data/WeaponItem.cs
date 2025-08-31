@@ -21,6 +21,9 @@ public class WeaponItem : ItemData
     public int fireDamge = 0;
     public int holyDamge = 0;*/
 
+
+    [Header("Weapon Poise")]
+    public float poiseDamage = 10;
     // Weapon Modifier
     // Light Attack Modifier
     // Heavy Attack Modifier
