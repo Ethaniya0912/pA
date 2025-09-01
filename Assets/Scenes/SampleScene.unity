@@ -2009,7 +2009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cd9f8e7df4796469651e4367aa2097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemApple: {fileID: 11400000, guid: a50b4d79d165e7a4ebc8bfe085904aa4, type: 2}
+  itemApple: {fileID: 11400000, guid: 1403631b27f8bcc4e9cac6e52d526595, type: 2}
   inventoryPanel: {fileID: 1216026511}
   equipPanel: {fileID: 1274905630}
   craftingPanel: {fileID: 723716313}

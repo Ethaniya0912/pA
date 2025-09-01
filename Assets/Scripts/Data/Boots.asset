@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d902616d1204b04faa07af761d49428, type: 3}
-  m_Name: Armor1
+  m_Name: Boots
   m_EditorClassIdentifier: 
-  itemName: Armor1
-  icon: {fileID: 21300000, guid: 149b913293cc83f439ffb57da31c3b28, type: 3}
-  itemType: 3
+  itemName: Boots
+  icon: {fileID: 21300000, guid: edf3778b8c762304fbe07de559b316a6, type: 3}
+  itemType: 5
   maxStackSize: 1
   isCraftingMaterial: 0

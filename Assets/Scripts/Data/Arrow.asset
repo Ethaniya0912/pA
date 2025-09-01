@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d902616d1204b04faa07af761d49428, type: 3}
-  m_Name: Apple
+  m_Name: Arrow
   m_EditorClassIdentifier: 
-  itemName: Apple
-  icon: {fileID: 21300000, guid: 149b913293cc83f439ffb57da31c3b28, type: 3}
-  itemType: 7
-  maxStackSize: 5
+  itemName: Arrow
+  icon: {fileID: 21300000, guid: e734888ae9e088c4e9fe25dc1a0c2007, type: 3}
+  itemType: 6
+  maxStackSize: 1
   isCraftingMaterial: 0
