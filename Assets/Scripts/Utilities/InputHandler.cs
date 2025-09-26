@@ -90,7 +90,7 @@ public class InputHandler : MonoBehaviour
 
         player.playerAnimatorManager.UpdateAnimatorMovementParameters(horizontalInput, verticalInput);
 
-        isMoving = InputHandler.Instance.verticalInput != 0.0f || InputHandler.Instance.horizontalInput != 0.0f; 
+        isMoving = (verticalInput != 0.0f || horizontalInput != 0.0f); 
     }
 
     // 액션관련 //

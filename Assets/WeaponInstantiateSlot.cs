@@ -10,5 +10,8 @@ public class WeaponInstantiateSlot : MonoBehaviour
     public void UnloadWeapon()
     {
         if (currentWeaponModel != null)
+        {
+
+        }
     }
 }

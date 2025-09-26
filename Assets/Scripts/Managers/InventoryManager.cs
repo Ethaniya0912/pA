@@ -171,13 +171,17 @@ public class InventoryManager : MonoBehaviour
             quickSlotUIs[i].Initialize(this, quickSlots[i], SlotUI.SlotType.Quick, i, Vector2Int.zero);
         }
 
+        /*
         // 작업대 슬롯 UI
         for (int i = 0; i < craftingSlotUIs.Length; i++)
         {
             craftingSlotUIs[i].Initialize(this, craftingSlots[i], SlotUI.SlotType.Crafting, i, Vector2Int.zero);
         }
+        
 
         resultSlotUI.Initialize(this, new InventorySlot(), SlotUI.SlotType.Crafting, -1, Vector2Int.zero);
+        */
+
         draggedItemIcon.enabled = false;
     }
 
@@ -378,8 +382,8 @@ public class InventoryManager : MonoBehaviour
         }
         foreach (var slotUI in equipSlotUIs) slotUI.UpdateUI();
         foreach (var slotUI in quickSlotUIs) slotUI.UpdateUI();
-        foreach (var slotUI in craftingSlotUIs) slotUI.UpdateUI();
-        if(resultSlotUI !=null) resultSlotUI.UpdateUI();
+        //foreach (var slotUI in craftingSlotUIs) slotUI.UpdateUI();
+        //if(resultSlotUI !=null) resultSlotUI.UpdateUI();
     }
 
     private void AddItemApple() // 테스트용
