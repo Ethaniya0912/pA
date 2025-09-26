@@ -16,11 +16,13 @@ public class InputHandler : MonoBehaviour
     public float verticalInput;
     public float horizontalInput;
     public float moveAmount;
+    public bool isMoving;
 
     //플레이어 액션//
     public bool DashInput = false;
     public bool LeftClickInput;
     public bool TabInput;
+    public bool InteractInput; //E키
 
     // 인풋 액션맵
     PlayerControls playerController;
@@ -44,14 +46,15 @@ public class InputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-/*        if(Instance == null)
-        {*/
-            Debug.Log("Instance is Null");
-            playerController = new PlayerControls();
-            playerController.PlayerControlz.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
-            playerController.PlayerActions.Dash.performed += i => DashInput = true;
-            playerController.PlayerActions.LeftClick.performed += i => LeftClickInput = true;
-            playerController.PlayerActions.Tab.performed += i => TabInput = true;
+        /*        if(Instance == null)
+                {*/
+        Debug.Log("Instance is Null");
+        playerController = new PlayerControls();
+        playerController.PlayerControlz.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+        playerController.PlayerActions.Dash.performed += i => DashInput = true;
+        playerController.PlayerActions.LeftClick.performed += i => LeftClickInput = true;
+        playerController.PlayerActions.Tab.performed += i => TabInput = true;
+        playerController.PlayerActions.Interaction.performed += i => InteractInput = true;
         /*        }*/
         Debug.Log("Instance is not null");
         playerController.Enable();
@@ -63,12 +66,13 @@ public class InputHandler : MonoBehaviour
         HandleLeftClickInput();
         HandleDashInput();
         HandleTabInput();
+        HandleInteraction();
     }
 
     private void HandleMovementInput()
     {
         // movementInput 벡터값에서 x,y 값을 각 인풋에 대입
-        verticalInput = movementInput.y; 
+        verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
 
         // 절대값을 돌려주게 함.
@@ -85,6 +89,8 @@ public class InputHandler : MonoBehaviour
         }
 
         player.playerAnimatorManager.UpdateAnimatorMovementParameters(horizontalInput, verticalInput);
+
+        isMoving = InputHandler.Instance.verticalInput != 0.0f || InputHandler.Instance.horizontalInput != 0.0f; 
     }
 
     // 액션관련 //
@@ -95,7 +101,7 @@ public class InputHandler : MonoBehaviour
             DashInput = false;
             player.playerLocomotionManager.AttemptToDodgeAction();
         }
-        
+
     }
 
     private void HandleLeftClickInput()
@@ -117,5 +123,11 @@ public class InputHandler : MonoBehaviour
             TabInput = false;
         }
     }
-
+    private void HandleInteraction()
+    {
+        if (InteractInput)
+        {
+            InteractInput = false;
+        }
+    }
 }

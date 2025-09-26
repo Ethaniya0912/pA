@@ -17,7 +17,6 @@ public class PlayerLocomotionManager : LocomotionManager
     // 액션불 //
     public bool isDodge = false;
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -66,6 +65,8 @@ public class PlayerLocomotionManager : LocomotionManager
             //Debug.Log("0.5수준");
             player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
         }
+
+
     }
 
     public void AttemptToDodgeAction()

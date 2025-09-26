@@ -8,11 +8,18 @@ public class ItemData : ScriptableObject
     public ItemType itemType; // 아이템 타입 (투구, 방패, 일반 아이템 등)
     public int maxStackSize; // 최대 스택 가능 수
     public bool isCraftingMaterial; // 크래프팅 재료로 사용 가능한지
+    public bool isCraftable = false; // 제작 가능 여부
+    public RecipeCategory category = RecipeCategory.Basic; // 레시피 카테고리
 }
 
 public enum ItemType
 {
-    None, Helmet, Shield, Armor, Pants, Boots, Arrow, General
+    None, Helmet, Shield, Armor, Pants, Boots, Arrow, General, Workbench
+}
+
+public enum RecipeCategory
+{
+    Basic, Tools, Station, Build
 }
 
 [CreateAssetMenu(fileName = "InventoryConfig", menuName = "Inventory/Config")]
