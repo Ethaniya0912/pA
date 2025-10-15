@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public class InventoryManager : MonoBehaviour
 {
 
-    PlayerManager player;
-
     public ItemData itemApple; // Test 용
 
     [Header("UI Panels")]
@@ -71,11 +69,6 @@ public class InventoryManager : MonoBehaviour
         if (craftingManager == null) Debug.LogError("CraftingManager not found", this);
     }
     
-    private void Start()
-    {
-        player = GetComponent<PlayerManager>();
-    }
-
     //나중에 HandlerManager로 연동 예정
     private void Update()
     {
@@ -234,8 +227,8 @@ public class InventoryManager : MonoBehaviour
             else if (Physics.Raycast(ray, out hit, dropDistance, groundLayer))
             {
                 // 지면 드롭
-                DropItemToGround(hit.point, draggedSlot.item, draggedSlot.quantity);
                 Debug.Log($"Dropped {draggedSlot.item.itemName} to ground at {hit.point}");
+                DropItemToGround(hit.point, draggedSlot.item, draggedSlot.quantity);
             }
             else
             {

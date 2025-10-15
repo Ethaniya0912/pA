@@ -2211,7 +2211,7 @@ MonoBehaviour:
   workbenchRecipe: {fileID: 11400000, guid: fdc0bfbab7909c04584fe820250a876b, type: 2}
   workbenchPrefab: {fileID: 6087379905814695739, guid: 63bec0cfc8d5e3d4fa70b3c6701a9082, type: 3}
   craftingManager: {fileID: 1179117842}
-  droppedItemPrefab: {fileID: 0}
+  droppedItemPrefab: {fileID: 1961338714516080803, guid: 195e49ed8fddf064d897c8404f799222, type: 3}
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
