@@ -1052,7 +1052,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &648216330
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1086,7 +1086,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2172,14 +2172,6 @@ MonoBehaviour:
   workbenchRecipe: {fileID: 11400000, guid: fdc0bfbab7909c04584fe820250a876b, type: 2}
   workbenchPrefab: {fileID: 6087379905814695739, guid: 63bec0cfc8d5e3d4fa70b3c6701a9082, type: 3}
   craftingManager: {fileID: 1179117842}
-  droppedItemPrefab: {fileID: 1961338714516080803, guid: 195e49ed8fddf064d897c8404f799222, type: 3}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 1
-  uiLayer:
-    serializedVersion: 2
-    m_Bits: 32
-  dropDistance: 5
 --- !u!114 &1179117841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2218,7 +2210,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fdc0bfbab7909c04584fe820250a876b, type: 2}
   - {fileID: 11400000, guid: 0f33d0ddcad0b5f499129fb62bf33268, type: 2}
   - {fileID: 11400000, guid: 61514fdf9956824499c9bb39dfe4bf55, type: 2}
-  autoAddToInventory: 1
 --- !u!224 &1184544210 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4449691431261850091, guid: 4b554b22ab82b594eaccabb6d618cef3, type: 3}
@@ -3513,10 +3504,6 @@ PrefabInstance:
     - target: {fileID: 2257635853876365684, guid: 4b554b22ab82b594eaccabb6d618cef3, type: 3}
       propertyPath: m_Name
       value: WorkbenchSlotUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 2257635853876365684, guid: 4b554b22ab82b594eaccabb6d618cef3, type: 3}
-      propertyPath: m_Layer
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2257635853876365684, guid: 4b554b22ab82b594eaccabb6d618cef3, type: 3}
       propertyPath: m_IsActive
