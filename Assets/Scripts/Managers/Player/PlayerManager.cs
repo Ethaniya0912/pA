@@ -9,7 +9,7 @@ public class PlayerManager : CharacterManager
     public PlayerLocomotionManager playerLocomotionManager;
     public CombatManager combatManager;
     public StatsManager statsManager;
-    public InventoryManager inventoryManager;
+    public PlayerInventoryManager playerinventoryManager;
 
     protected override void Awake()
     {
@@ -21,7 +21,7 @@ public class PlayerManager : CharacterManager
         playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
         combatManager = GetComponent<CombatManager>();
         statsManager = GetComponent<StatsManager>();
-        inventoryManager = GetComponent<InventoryManager>();
+        playerinventoryManager = GetComponent<PlayerInventoryManager>();
 
     }
 
@@ -39,6 +39,6 @@ public class PlayerManager : CharacterManager
         playerLocomotionManager.HandleAllMovement();
         combatManager.HandleAllCombat();
         statsManager.HandleAllStats();
-        inventoryManager.HandleAllInventorys();
+        playerinventoryManager.HandleAllInventorys();
     }
 }
