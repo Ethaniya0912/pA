@@ -13,6 +13,7 @@ public class CraftingManager : MonoBehaviour
     [SerializeField] private GameObject recipePreviewPrefab; // 미리보기 프리팹 (Image + onClick)
     [SerializeField] private TextMeshProUGUI hoverInfoText; // hover 시 아이템명/재료 표시
     [SerializeField] private List<Recipe> allRecipes = new List<Recipe>(); // 모든 레시피 리스트
+    [SerializeField] private bool autoAddToInventory = true; // 옵션: 자동 인벤토리 추가 여부
 
     private RecipeCategory currentCategory = RecipeCategory.Basic;
     private InventoryManager inventoryManager; // 재료 확인용
@@ -112,6 +113,12 @@ public class CraftingManager : MonoBehaviour
 
     private void CraftItem(Recipe recipe)
     {
+        if (recipe == null || inventoryManager == null)
+        {
+            Debug.LogError("CraftItem: Recipe or InventoryManager is null", this);
+            return;
+        }
+
         if (!HasMaterials(recipe.requirements))
         {
             Debug.LogWarning("Not enough materials for " + recipe.recipeName);
@@ -119,9 +126,27 @@ public class CraftingManager : MonoBehaviour
         }
 
         ConsumeMaterials(recipe.requirements);
-        // 아이템 생성 및 Drag 상태 설정
-        inventoryManager.StartDragging(new InventorySlot { item = recipe.resultItem, quantity = 1 }, null); // Drag 시작 (null slotUI for crafted item)
-        Debug.Log("Crafted: " + recipe.resultItem.itemName);
+
+        // 아이템 생성만 (드래그 없이)
+        if (autoAddToInventory)
+        {
+            bool added = inventoryManager.AddItem(recipe.resultItem, 1); // 인벤토리에 자동 추가
+            if (added)
+            {
+                Debug.Log("Crafted and added to inventory: " + recipe.resultItem.itemName);
+            }
+            else
+            {
+                Debug.LogWarning("Crafted but inventory full: " + recipe.resultItem.itemName);
+                // 풀 시 대체 로직: UI 메시지 표시 또는 임시 슬롯 생성
+            }
+        }
+        else
+        {
+            // 옵션: 드래그 상태로 만들기 (기존 로직)
+            inventoryManager.StartDragging(new InventorySlot { item = recipe.resultItem, quantity = 1 }, null);
+            Debug.Log("Crafted and started dragging: " + recipe.resultItem.itemName);
+        }
     }
 
     private bool HasMaterials(List<ItemRequirement> requirements)

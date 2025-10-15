@@ -1052,7 +1052,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &648216330
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1086,7 +1086,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2075,7 +2075,7 @@ MonoBehaviour:
   playerLocomotionManager: {fileID: 0}
   combatManager: {fileID: 0}
   statsManager: {fileID: 0}
-  inventoryManager: {fileID: 0}
+  playerinventoryManager: {fileID: 0}
 --- !u!114 &1179117837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2127,51 +2127,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1179117840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179117831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76cd9f8e7df4796469651e4367aa2097, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemApple: {fileID: 11400000, guid: 00ffa2b3702df5044b10bff5a393c619, type: 2}
-  inventoryPanel: {fileID: 1216026511}
-  equipPanel: {fileID: 1274905630}
-  craftingPanel: {fileID: 723716313}
-  quickSlotPanel: {fileID: 2001141228}
-  inventoryGrid: {fileID: 1216026513}
-  slotUIPrefab: {fileID: -485053287729008853, guid: 4b554b22ab82b594eaccabb6d618cef3, type: 3}
-  equipSlotUIs:
-  - {fileID: 271833169}
-  - {fileID: 1706684215}
-  - {fileID: 1816095379}
-  - {fileID: 1730549424}
-  - {fileID: 1981416028}
-  - {fileID: 1655658518}
-  quickSlotUIs:
-  - {fileID: 706012615}
-  - {fileID: 841892753}
-  - {fileID: 1366005449}
-  - {fileID: 1576331568}
-  - {fileID: 1353581476}
-  - {fileID: 1731542440}
-  - {fileID: 1706926491}
-  craftingSlotUIs:
-  - {fileID: 0}
-  resultSlotUI: {fileID: 0}
-  draggedItemIcon: {fileID: 648216331}
-  inventoryRows: 3
-  inventoryCols: 7
-  quickSlotCount: 7
-  workbenchSlotUI: {fileID: 573612077}
-  workbenchRecipe: {fileID: 11400000, guid: fdc0bfbab7909c04584fe820250a876b, type: 2}
-  workbenchPrefab: {fileID: 6087379905814695739, guid: 63bec0cfc8d5e3d4fa70b3c6701a9082, type: 3}
-  craftingManager: {fileID: 1179117842}
 --- !u!114 &1179117841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2210,6 +2165,62 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fdc0bfbab7909c04584fe820250a876b, type: 2}
   - {fileID: 11400000, guid: 0f33d0ddcad0b5f499129fb62bf33268, type: 2}
   - {fileID: 11400000, guid: 61514fdf9956824499c9bb39dfe4bf55, type: 2}
+  autoAddToInventory: 1
+--- !u!114 &1179117843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179117831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9928313c6ef654500bad247364d344d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemApple: {fileID: 11400000, guid: 00ffa2b3702df5044b10bff5a393c619, type: 2}
+  inventoryPanel: {fileID: 1216026511}
+  equipPanel: {fileID: 1274905630}
+  craftingPanel: {fileID: 723716313}
+  quickSlotPanel: {fileID: 2001141228}
+  inventoryGrid: {fileID: 1216026513}
+  slotUIPrefab: {fileID: -485053287729008853, guid: 4b554b22ab82b594eaccabb6d618cef3, type: 3}
+  equipSlotUIs:
+  - {fileID: 271833169}
+  - {fileID: 1706684215}
+  - {fileID: 1816095379}
+  - {fileID: 1730549424}
+  - {fileID: 1981416028}
+  - {fileID: 1655658518}
+  quickSlotUIs:
+  - {fileID: 706012615}
+  - {fileID: 841892753}
+  - {fileID: 1366005449}
+  - {fileID: 1576331568}
+  - {fileID: 1353581476}
+  - {fileID: 1731542440}
+  - {fileID: 1706926491}
+  craftingSlotUIs:
+  - {fileID: 0}
+  resultSlotUI: {fileID: 0}
+  draggedItemIcon: {fileID: 648216331}
+  inventoryRows: 3
+  inventoryCols: 7
+  quickSlotCount: 7
+  workbenchSlotUI: {fileID: 573612077}
+  workbenchRecipe: {fileID: 11400000, guid: fdc0bfbab7909c04584fe820250a876b, type: 2}
+  workbenchPrefab: {fileID: 6087379905814695739, guid: 63bec0cfc8d5e3d4fa70b3c6701a9082, type: 3}
+  craftingManager: {fileID: 1179117842}
+  droppedItemPrefab: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  uiLayer:
+    serializedVersion: 2
+    m_Bits: 32
+  dropDistance: 5
+  currentRightHandWeapon: {fileID: 0}
+  currentLeftHandWeapon: {fileID: 0}
 --- !u!224 &1184544210 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4449691431261850091, guid: 4b554b22ab82b594eaccabb6d618cef3, type: 3}
@@ -4145,13 +4156,13 @@ PrefabInstance:
       addedObject: {fileID: 1179117839}
     - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1179117840}
-    - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1179117842}
     - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1179117841}
+    - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1179117843}
   m_SourcePrefab: {fileID: 100100000, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
 --- !u!1001 &2041736996
 PrefabInstance:

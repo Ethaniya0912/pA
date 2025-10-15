@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -6,18 +6,18 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-/*
-    PlayerManager player;*/
 
-    public ItemData itemApple; // Test ¿ë
+    PlayerManager player;
+
+    public ItemData itemApple; // Test ìš©
 
     [Header("UI Panels")]
-    [SerializeField] private GameObject inventoryPanel; // 7x3 ÀÎº¥Åä¸® ÆĞ³Î
-    [SerializeField] private GameObject equipPanel;     // ÀåÂø ½½·Ô ÆĞ³Î
-    [SerializeField] private GameObject craftingPanel;  // ÀÛ¾÷´ë ÆĞ³Î
-    [SerializeField] private GameObject quickSlotPanel; // Äü ½½·Ô ÆĞ³Î (¼±ÅÃÀû Åä±Û)
+    [SerializeField] private GameObject inventoryPanel; // 7x3 ì¸ë²¤í† ë¦¬ íŒ¨ë„
+    [SerializeField] private GameObject equipPanel;     // ì¥ì°© ìŠ¬ë¡¯ íŒ¨ë„
+    [SerializeField] private GameObject craftingPanel;  // ì‘ì—…ëŒ€ íŒ¨ë„
+    [SerializeField] private GameObject quickSlotPanel; // í€µ ìŠ¬ë¡¯ íŒ¨ë„ (ì„ íƒì  í† ê¸€)
 
-    [Header("GridLayoutGroup ¼³Á¤")]
+    [Header("GridLayoutGroup ì„¤ì •")]
     [SerializeField] private GridLayoutGroup inventoryGrid;
     [SerializeField] private SlotUI slotUIPrefab;
     [SerializeField] private SlotUI[] equipSlotUIs;
@@ -37,19 +37,24 @@ public class InventoryManager : MonoBehaviour
     private InventorySlot draggedSlot;
     private SlotUI draggedSlotUI;
 
-    private bool isInventoryOpen = false; // ÀÎº¥Åä¸® UI »óÅÂ
-    private bool isCraftingOpen = false; // ÀÛ¾÷´ë UI »óÅÂ
-    private bool TabInput; // Tab Å° ÀÔ·Â ÇÃ·¡±×
-    private bool KeyInteraction; // E Å° ÀÔ·Â ÇÃ·¡±×
+    private bool isInventoryOpen = false; // ì¸ë²¤í† ë¦¬ UI ìƒíƒœ
+    private bool isCraftingOpen = false; // ì‘ì—…ëŒ€ UI ìƒíƒœ
+    private bool TabInput; // Tab í‚¤ ì…ë ¥ í”Œë˜ê·¸
+    private bool KeyInteraction; // E í‚¤ ì…ë ¥ í”Œë˜ê·¸
 
-    // ÀÛ¾÷´ë °ü·Ã
+    // ì‘ì—…ëŒ€ ê´€ë ¨
     [Header("Workbench Settings")]
-    [SerializeField] private SlotUI workbenchSlotUI; // ÀÛ¾÷´ë ½½·Ô
-    [SerializeField] private Recipe workbenchRecipe; // ÀÛ¾÷´ë ·¹½ÃÇÇ
-    [SerializeField] private GameObject workbenchPrefab; // ¹Ù´Ú¿¡ ¼³Ä¡ÇÒ ÀÛ¾÷´ë ÇÁ¸®ÆÕ
+    [SerializeField] private SlotUI workbenchSlotUI; // ì‘ì—…ëŒ€ ìŠ¬ë¡¯
+    [SerializeField] private Recipe workbenchRecipe; // ì‘ì—…ëŒ€ ë ˆì‹œí”¼
+    [SerializeField] private GameObject workbenchPrefab; // ë°”ë‹¥ì— ì„¤ì¹˜í•  ì‘ì—…ëŒ€ í”„ë¦¬íŒ¹
 
     [SerializeField] private CraftingManager craftingManager;
     private bool isDragging = false;
+
+    [SerializeField] private GameObject droppedItemPrefab; // ë°”ë‹¥ì— ë“œë¡­í•  ì•„ì´í…œ í”„ë¦¬íŒ¹ (DroppedItem í¬í•¨)
+    [SerializeField] private LayerMask groundLayer = 1 << 0; // ì§€ë©´ ë ˆì´ì–´ ë§ˆìŠ¤í¬ (Default Layer = 0)
+    [SerializeField] private LayerMask uiLayer = 1 << 5; // UI ë ˆì´ì–´ ë§ˆìŠ¤í¬ (UI Layer = 5)
+    [SerializeField] private float dropDistance = 5f; // ë“œë¡­ Raycast ê±°ë¦¬
 
     protected virtual void Awake()
     {
@@ -61,17 +66,17 @@ public class InventoryManager : MonoBehaviour
         InitializeUI();
 
 
-        // ÀÛ¾÷´ë °ü·Ã
+        // ì‘ì—…ëŒ€ ê´€ë ¨
         craftingManager = FindObjectOfType<CraftingManager>();
         if (craftingManager == null) Debug.LogError("CraftingManager not found", this);
     }
-
-/*    private void Start()
+    
+    private void Start()
     {
         player = GetComponent<PlayerManager>();
     }
-*/
-    //³ªÁß¿¡ HandlerManager·Î ¿¬µ¿ ¿¹Á¤
+
+    //ë‚˜ì¤‘ì— HandlerManagerë¡œ ì—°ë™ ì˜ˆì •
     private void Update()
     {
 
@@ -79,11 +84,11 @@ public class InventoryManager : MonoBehaviour
 
     public void HandleAllInventorys()
     {
-        AddItemApple(); //Test ¿ë ¾ÆÀÌÅÛ Ãß°¡
-        HandleTabInput(); //TabÅ° ÀÔ·Â½Ã Inventory Åä±Û
-        HandleInteraction(); //EÅ° »óÈ£ÀÛ¿ë
-        HandleExitCrafting(); //ÀÌµ¿½Ã ÀÛ¾÷´ë UI ´İ±â
-        HandleExitInventory(); //ÀÌµ¿½Ã ÀÎº¥Åä¸® UI ´İ±â
+        AddItemApple(); //Test ìš© ì•„ì´í…œ ì¶”ê°€
+        HandleTabInput(); //Tabí‚¤ ì…ë ¥ì‹œ Inventory í† ê¸€
+        HandleInteraction(); //Eí‚¤ ìƒí˜¸ì‘ìš©
+        HandleExitCrafting(); //ì´ë™ì‹œ ì‘ì—…ëŒ€ UI ë‹«ê¸°
+        HandleExitInventory(); //ì´ë™ì‹œ ì¸ë²¤í† ë¦¬ UI ë‹«ê¸°
     }
 
     private void InitializeGridLayout()
@@ -147,7 +152,7 @@ public class InventoryManager : MonoBehaviour
 
     private void InitializeUI()
     {
-        // ÀÎº¥Åä¸® ½½·Ô UI
+        // ì¸ë²¤í† ë¦¬ ìŠ¬ë¡¯ UI
         for (int i = 0; i < inventoryRows; i++)
         {
             for (int j = 0; j < inventoryCols; j++)
@@ -159,20 +164,20 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        // ÀåÂø ½½·Ô UI
+        // ì¥ì°© ìŠ¬ë¡¯ UI
         for (int i = 0; i < equipSlotUIs.Length; i++)
         {
             equipSlotUIs[i].Initialize(this, equipSlots[i], SlotUI.SlotType.Equip, i, Vector2Int.zero);
         }
 
-        // Äü ½½·Ô UI
+        // í€µ ìŠ¬ë¡¯ UI
         for (int i = 0; i < quickSlotUIs.Length; i++)
         {
             quickSlotUIs[i].Initialize(this, quickSlots[i], SlotUI.SlotType.Quick, i, Vector2Int.zero);
         }
 
         /*
-        // ÀÛ¾÷´ë ½½·Ô UI
+        // ì‘ì—…ëŒ€ ìŠ¬ë¡¯ UI
         for (int i = 0; i < craftingSlotUIs.Length; i++)
         {
             craftingSlotUIs[i].Initialize(this, craftingSlots[i], SlotUI.SlotType.Crafting, i, Vector2Int.zero);
@@ -185,7 +190,7 @@ public class InventoryManager : MonoBehaviour
         draggedItemIcon.enabled = false;
     }
 
-    // ÀÛ¾÷´ë ¾ÆÀÌÄÜ Å¬¸¯ ½Ã (workbenchSlotUIÀÇ onClick ÀÌº¥Æ®·Î ¿¬°á)
+    // ì‘ì—…ëŒ€ ì•„ì´ì½˜ í´ë¦­ ì‹œ (workbenchSlotUIì˜ onClick ì´ë²¤íŠ¸ë¡œ ì—°ê²°)
     public void OnWorkbenchClick()
     {
         if (HasMaterials(workbenchRecipe.requirements))
@@ -211,16 +216,86 @@ public class InventoryManager : MonoBehaviour
         draggedItemIcon.rectTransform.position = position;
     }
 
-    public void EndDragging(SlotUI targetSlotUI)
+    public void EndDragging(SlotUI sourceSlotUI)
     {
+        // í™”ë©´ ë°– ë“œë¡­ í™•ì¸ (ì´ˆê¸°í™” ì „ì— ì²´í¬)
+        if (draggedSlot != null && draggedSlot.item != null)
+        {
+            // UI ìŠ¬ë¡¯ íˆíŠ¸ í™•ì¸
+            Vector3 mousePos = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, dropDistance, uiLayer))
+            {
+                // UI ìŠ¬ë¡¯: OnDropì—ì„œ ì´ë¯¸ ì²˜ë¦¬ë¨
+                Debug.Log("Dropped on UI slot (handled in OnDrop)");
+            }
+            else if (Physics.Raycast(ray, out hit, dropDistance, groundLayer))
+            {
+                // ì§€ë©´ ë“œë¡­
+                DropItemToGround(hit.point, draggedSlot.item, draggedSlot.quantity);
+                Debug.Log($"Dropped {draggedSlot.item.itemName} to ground at {hit.point}");
+            }
+            else
+            {
+                Debug.LogWarning("Drop failed: No valid hit");
+            }
+        }
+
+        // ìƒíƒœ ì •ë¦¬ (í•­ìƒ ì‹¤í–‰)
         draggedItemIcon.enabled = false;
         draggedSlot = null;
         draggedSlotUI = null;
         isDragging = false;
+
+        if (sourceSlotUI != null)
+        {
+            Debug.Log("Ended dragging from " + sourceSlotUI.name);
+        }
+    }
+
+    private void DropItemToGround(Vector3 position, ItemData item, int quantity)
+    {
+        if (item == null)
+    {
+        Debug.LogError("DropItemToGround: ItemData is null", this);
+        return;
+    }
+    if (droppedItemPrefab == null)
+    {
+        Debug.LogError("DropItemToGround: droppedItemPrefab is null", this);
+        return;
+    }
+    if (draggedSlotUI == null || draggedSlotUI.Slot == null)
+    {
+        Debug.LogWarning("DropItemToGround: draggedSlotUI or slot is null â€“ cannot clear original slot", this);
+        return;
+    }
+
+    // ë°”ë‹¥ ì˜¤ë¸Œì íŠ¸ ìƒì„±
+    GameObject droppedObj = Instantiate(droppedItemPrefab, position + Vector3.up * 0.1f, Quaternion.identity);
+    DroppedItem droppedItem = droppedObj.GetComponent<DroppedItem>();
+    if (droppedItem != null)
+    {
+        droppedItem.Initialize(item, quantity, this);
+        Debug.Log($"Created dropped item: {quantity} {item.itemName} at {position}");
+    }
+    else
+    {
+        Debug.LogError("DropItemToGround: DroppedItem component missing on prefab", this);
+    }
+
+    // ì›ë˜ ìŠ¬ë¡¯ ë¹„ìš°ê¸° (ë¬¸ì œ í•´ê²°)
+    draggedSlotUI.Slot.Clear(); // ìŠ¬ë¡¯ ë°ì´í„° ì´ˆê¸°í™”
+    draggedSlotUI.UpdateUI(); // ì›ë˜ ìŠ¬ë¡¯ UI ê°±ì‹  (ì•„ì´ì½˜/ìˆ˜ëŸ‰ ì‚¬ë¼ì§)
+
+    // ì „ì²´ UI ê°±ì‹  (ì•ˆì „ì„±)
+    UpdateUI();
     }
 
 
-    // Àç·á È®ÀÎ/¼Ò¸ğ (CraftingManager¿Í °øÀ¯)
+    // ì¬ë£Œ í™•ì¸/ì†Œëª¨ (CraftingManagerì™€ ê³µìœ )
     private bool HasMaterials(List<ItemRequirement> requirements)
     {
         foreach (var req in requirements)
@@ -257,41 +332,71 @@ public class InventoryManager : MonoBehaviour
 
     public void RemoveItem(ItemData item, int quantity)
     {
-        int remaining = quantity;
-        for (int i = 0; i < inventoryRows; i++)
+        if (item == null)
         {
-            for (int j = 0; j < inventoryCols; j++)
+            Debug.LogError("RemoveItem: ItemData is null", this);
+            return;
+        }
+
+        int remaining = quantity; // ë‚¨ì€ ì†Œëª¨ëŸ‰
+
+        // 1. Quick Slotì—ì„œ ì†Œëª¨ (ìš°ì„ )
+        for (int k = 0; k < quickSlots.Length && remaining > 0; k++)
+        {
+            if (quickSlots[k].item == item)
+            {
+                if (quickSlots[k].quantity >= remaining)
+                {
+                    quickSlots[k].quantity -= remaining;
+                    remaining = 0;
+                }
+                else
+                {
+                    remaining -= quickSlots[k].quantity;
+                    quickSlots[k].Clear(); // ìŠ¬ë¡¯ ì™„ì „ ë¹„ìš°ê¸°
+                }
+            }
+        }
+
+        // 2. ë©”ì¸ ì¸ë²¤í† ë¦¬ì—ì„œ ì†Œëª¨
+        for (int i = 0; i < inventoryRows && remaining > 0; i++)
+        {
+            for (int j = 0; j < inventoryCols && remaining > 0; j++)
             {
                 if (inventorySlots[i, j].item == item)
                 {
-                    if (inventorySlots[i, j].quantity > remaining)
+                    if (inventorySlots[i, j].quantity >= remaining)
                     {
                         inventorySlots[i, j].quantity -= remaining;
-                        UpdateUI();
-                        return;
+                        remaining = 0;
                     }
                     else
                     {
                         remaining -= inventorySlots[i, j].quantity;
                         inventorySlots[i, j].Clear();
-                        if (remaining == 0)
-                        {
-                            UpdateUI();
-                            return;
-                        }
                     }
                 }
             }
         }
+
+        if (remaining > 0)
+        {
+            Debug.LogWarning($"RemoveItem: Not enough {item.itemName} in inventory (needed {quantity}, removed {quantity - remaining})", this);
+        }
+
+        UpdateUI(); // UI ê°±ì‹  (ì•„ì´ì½˜/ìˆ˜ëŸ‰ í‘œì‹œ)
+        Debug.Log($"Removed {quantity - remaining} {item.itemName} from inventory");
     }
 
     public void DropItem(SlotUI targetSlotUI, SlotUI.SlotType targetType, int targetIndex, Vector2Int targetGridPos)
     {
+        Debug.Log($"Attempting to drop item to {targetSlotUI.name} ({targetType})");
         if (draggedSlot == null) return;
 
         InventorySlot targetSlot = GetSlot(targetType, targetIndex, targetGridPos);
         if (targetSlot != null)
         {
+            // ì¥ì°© ìŠ¬ë¡¯ì— ë§ëŠ” ì•„ì´í…œ íƒ€ì…ì¸ì§€ í™•ì¸
             if (targetType == SlotUI.SlotType.Equip)
             {
                 ItemType requiredType = GetEquipSlotType(targetIndex);
@@ -306,12 +411,13 @@ public class InventoryManager : MonoBehaviour
             targetSlotUI.UpdateUI();
             draggedSlotUI.UpdateUI();
         }
-        // µğ¹ö±ë
+        // ë””ë²„ê¹…
         if (targetType == SlotUI.SlotType.Equip && (targetIndex < 0 || targetIndex >= equipSlots.Length))
         {
             Debug.LogError($"DropItem: Invalid targetIndex {targetIndex}", this);
             return;
         }
+
     }
 
     private InventorySlot GetSlot(SlotUI.SlotType type, int index, Vector2Int gridPos)
@@ -337,13 +443,25 @@ public class InventoryManager : MonoBehaviour
         if (pair.Equals(default(KeyValuePair<ItemType, int>)))
         {
             Debug.LogError($"GetEquipSlotType: No ItemType found for index {index}", this);
-            return ItemType.General; // ±âº»°ª ¹İÈ¯
+            return ItemType.General; // ê¸°ë³¸ê°’ ë°˜í™˜
         }
         return pair.Key;
     }
 
     public bool AddItem(ItemData item, int quantity)
     {
+        // 1. Quick Slot ìš°ì„  ìŠ¤íƒ
+        for (int k = 0; k < quickSlots.Length; k++)
+        {
+            if (!quickSlots[k].IsEmpty && quickSlots[k].item == item && quickSlots[k].quantity < item.maxStackSize)
+            {
+                quickSlots[k].AddQuantity(quantity);
+                UpdateUI(); // Quick Slot UI ê°±ì‹ 
+                Debug.Log($"Added {quantity} {item.itemName} to Quick Slot {k}");
+                return true;
+            }
+        }
+        // 2. ë©”ì¸ ì¸ë²¤í† ë¦¬ ìŠ¤íƒ
         for (int i = 0; i < inventoryRows; i++)
         {
             for (int j = 0; j < inventoryCols; j++)
@@ -364,7 +482,7 @@ public class InventoryManager : MonoBehaviour
                 if (inventorySlots[i, j].IsEmpty)
                 {
                     inventorySlots[i, j].SetItem(item, quantity);
-                    Debug.Log(inventorySlots[i, j].item); // item Ãß°¡µÇ¾ú´ÂÁö È®ÀÎ
+                    Debug.Log(inventorySlots[i, j].item); // item ì¶”ê°€ë˜ì—ˆëŠ”ì§€ í™•ì¸
                     UpdateUI();
                     return true;
                 }
@@ -386,7 +504,7 @@ public class InventoryManager : MonoBehaviour
         //if(resultSlotUI !=null) resultSlotUI.UpdateUI();
     }
 
-    private void AddItemApple() // Å×½ºÆ®¿ë
+    private void AddItemApple() // í…ŒìŠ¤íŠ¸ìš©
     {
         if (InputHandler.Instance.LeftClickInput)
         {
@@ -402,9 +520,10 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // E Å° »óÈ£ÀÛ¿ë (ÀÛ¾÷´ë ¿­±â)
+    // E í‚¤ ìƒí˜¸ì‘ìš© (ì‘ì—…ëŒ€ ì—´ê¸°)
     private void HandleInteraction()
     {
+        // Eí‚¤ë¡œ ì‘ì—…ëŒ€ UI ì—´ê¸°/ë‹«ê¸°
         if (InputHandler.Instance.InteractInput)
         {
             Debug.Log("E key pressed for interaction");
@@ -414,9 +533,9 @@ public class InventoryManager : MonoBehaviour
                 if (Physics.Raycast(ray, out RaycastHit hit, 10f))
                 {
                     Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
-                    if (hit.collider.gameObject.name == "Workbench") // ¼³Ä¡µÈ ÀÛ¾÷´ë ¿ÀºêÁ§Æ®
+                    if (hit.collider.gameObject.name == "Workbench") // ì„¤ì¹˜ëœ ì‘ì—…ëŒ€ ì˜¤ë¸Œì íŠ¸
                     {
-                        // ÀÛ¾÷´ë UI ¿­±â
+                        // ì‘ì—…ëŒ€ UI ì—´ê¸°
                         isCraftingOpen = true;
                         craftingManager.OpenCraftingUI();
                     }
@@ -424,9 +543,25 @@ public class InventoryManager : MonoBehaviour
             }
             else if (isCraftingOpen)
             {
-                // ÀÛ¾÷´ë UI ´İ±â
+                // ì‘ì—…ëŒ€ UI ë‹«ê¸°
                 isCraftingOpen = false;
                 craftingManager.CloseCraftingUI();
+            }
+
+            // Eí‚¤ë¡œ ì§€ë©´ ì•„ì´í…œ ì¤ê¸°
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                // Raycastë¡œ ì§€ë©´ ì•„ì´í…œ íˆíŠ¸
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit, 3f)) // 3m ê±°ë¦¬
+                {
+                    DroppedItem droppedItem = hit.collider.GetComponent<DroppedItem>();
+                    if (droppedItem != null)
+                    {
+                        // í”½ì—… ë¡œì§ì€ DroppedItem.OnTriggerEnterì—ì„œ ì²˜ë¦¬
+                        Debug.Log("E key hit on DroppedItem");
+                    }
+                }
             }
         }
     }
@@ -437,13 +572,13 @@ public class InventoryManager : MonoBehaviour
         {
             if (InputHandler.Instance.moveAmount > 0)
             {
-                // ÀÛ¾÷´ë UI ´İ±â
+                // ì‘ì—…ëŒ€ UI ë‹«ê¸°
                 isCraftingOpen = false;
                 craftingManager.CloseCraftingUI();
             }
             if (InputHandler.Instance.isMoving)
             {
-                // ÀÛ¾÷´ë UI ´İ±â
+                // ì‘ì—…ëŒ€ UI ë‹«ê¸°
                 isCraftingOpen = false;
                 craftingManager.CloseCraftingUI();
             }
@@ -455,7 +590,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (InputHandler.Instance.isMoving)
             {
-                // ÀÎº¥Åä¸® UI ´İ±â
+                // ì¸ë²¤í† ë¦¬ UI ë‹«ê¸°
                 isInventoryOpen = false;
                 inventoryPanel.SetActive(false);
                 equipPanel.SetActive(false);
