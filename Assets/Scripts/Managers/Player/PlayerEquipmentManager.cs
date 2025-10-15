@@ -53,7 +53,7 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
 
     public void LoadLeftWeapon()
     {
-        if (player.playerinventoryManager.currentRightHandWeapon != null)
+        if (player.playerinventoryManager.currentLeftHandWeapon != null)
         {
             leftHandSlot.LoadWeapon(player.playerinventoryManager.currentLeftHandWeapon.weaponModel);
         }

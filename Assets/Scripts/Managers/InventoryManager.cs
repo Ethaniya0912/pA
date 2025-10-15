@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-
-    PlayerManager player;
+/*
+    PlayerManager player;*/
 
     public ItemData itemApple; // Test 용
 
@@ -51,7 +51,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private CraftingManager craftingManager;
     private bool isDragging = false;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         InitializeGridLayout();
         InitializeInventory();
@@ -65,12 +65,12 @@ public class InventoryManager : MonoBehaviour
         craftingManager = FindObjectOfType<CraftingManager>();
         if (craftingManager == null) Debug.LogError("CraftingManager not found", this);
     }
-    
-    private void Start()
+
+/*    private void Start()
     {
         player = GetComponent<PlayerManager>();
     }
-
+*/
     //나중에 HandlerManager로 연동 예정
     private void Update()
     {

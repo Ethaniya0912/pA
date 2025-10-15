@@ -13,11 +13,7 @@ public class WeaponInstantiateSlot : MonoBehaviour
         //커런트 웨폰모델이 존재할 시, 파괴.
         if (currentWeaponModel != null)
         {
-<<<<<<< .merge_file_OBVQ2k
-
-=======
             Destroy(currentWeaponModel);
->>>>>>> .merge_file_FAPNYY
         }
     }
 

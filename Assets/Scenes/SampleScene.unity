@@ -4146,38 +4146,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1179117840}
-<<<<<<< .merge_file_Q2vpG6
     - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1179117842}
     - targetCorrespondingSourceObject: {fileID: 954169947656871538, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1179117841}
-=======
-    - targetCorrespondingSourceObject: {fileID: 6226967496870964101, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2020079825}
->>>>>>> .merge_file_Gk5IJz
   m_SourcePrefab: {fileID: 100100000, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
---- !u!1 &2020079824 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6226967496870964101, guid: 4ed330fe706c3e849a1dbcc0905cbb61, type: 3}
-  m_PrefabInstance: {fileID: 2020079823}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2020079825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2020079824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1f25505aa85a44efb8d58d8d132fbb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponSlot: 0
-  currentWeaponModel: {fileID: 0}
 --- !u!1001 &2041736996
 PrefabInstance:
   m_ObjectHideFlags: 0
