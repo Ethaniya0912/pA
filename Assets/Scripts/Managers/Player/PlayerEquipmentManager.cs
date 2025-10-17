@@ -9,6 +9,9 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
     public WeaponInstantiateSlot rightHandSlot;
     public WeaponInstantiateSlot leftHandSlot;
 
+    public GameObject rightHandWeaponModel;
+    public GameObject leftHandWeaponModel;
+
     protected override void Awake()
     {
         base.Awake();
@@ -47,7 +50,8 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
     {
         if (player.playerinventoryManager.currentRightHandWeapon != null)
         {
-            rightHandSlot.LoadWeapon(player.playerinventoryManager.currentRightHandWeapon.weaponModel);
+            rightHandWeaponModel = Instantiate(player.playerinventoryManager.currentRightHandWeapon.weaponModel);
+            rightHandSlot.LoadWeapon(rightHandWeaponModel);
         }
     }
 
@@ -55,7 +59,8 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
     {
         if (player.playerinventoryManager.currentLeftHandWeapon != null)
         {
-            leftHandSlot.LoadWeapon(player.playerinventoryManager.currentLeftHandWeapon.weaponModel);
+            leftHandWeaponModel = Instantiate(player.playerinventoryManager.currentRightHandWeapon.weaponModel);
+            leftHandSlot.LoadWeapon(leftHandWeaponModel);
         }
     }
 }
