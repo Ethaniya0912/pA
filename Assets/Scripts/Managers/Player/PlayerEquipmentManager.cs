@@ -16,17 +16,25 @@ public class PlayerEquipmentManager : CharacterEquipmentManager
     {
         base.Awake();
 
-        //ÇÃ·¹ÀÌ¾î ÀÎº¥Åä¸®¿¡ Á¢¼ÓÇÒ ¼ö ÀÖµµ·Ï ÇÃ·¹ÀÌ¾î¸Å´ÏÀú¸¦ ¼±¾ğÇØÁÖ°í ÄÄÆ÷³ÍÆ® ÀÎ½Ä.
+        //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Î½ï¿½.
         player = GetComponent<PlayerManager>();
         // Get Our Slots
         InitializeWeaponSlots();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        LoadWeaponsOnBothHands();
     }
 
     private void InitializeWeaponSlots()
     {
         WeaponInstantiateSlot[] weaponSlots = GetComponentsInChildren<WeaponInstantiateSlot>();
 
-        //°¢ÀÚ ½½·ÔÀ» Ã¼Å©ÇÏ°í, ÇØ´ç ÆÄÆ®¿¡ µû¶ó ÀÎ½ºÅÏ½º¸¦ ÇÒ´çÇØÁÖ±â.
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å©ï¿½Ï°ï¿½, ï¿½Ø´ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½Ö±ï¿½.
+        //ë§¤ child obejct ì—ì„œ weaponSlotì´ weaponSlotsì•ˆì—ì„œ ì°¾ì•„ì§ˆë•Œë§ˆë‹¤ 
         foreach (var weaponSlot in weaponSlots)
         {
             if (weaponSlot.weaponSlot == WeaponModelSlot.RightHand)
