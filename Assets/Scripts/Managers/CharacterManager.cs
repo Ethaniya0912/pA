@@ -6,6 +6,7 @@ public class CharacterManager : MonoBehaviour
 {
     [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
+    [HideInInspector] public StatsManager statsManager;
 
     protected virtual void Awake()
     {
@@ -15,6 +16,7 @@ public class CharacterManager : MonoBehaviour
         // 컨트롤러 컴포넌트 가져오기.
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        statsManager = GetComponent<StatsManager>();
     }
 
     // Update is called once per frame

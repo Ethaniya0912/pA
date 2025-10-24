@@ -8,7 +8,7 @@ public class PlayerManager : CharacterManager
     public PlayerAnimatorManager playerAnimatorManager;
     public PlayerLocomotionManager playerLocomotionManager;
     public CombatManager combatManager;
-    public StatsManager statsManager;
+    public PlayerStatsManager playerStatsManager;
     public PlayerInventoryManager playerinventoryManager;
 
     protected override void Awake()
@@ -20,7 +20,7 @@ public class PlayerManager : CharacterManager
         playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
         playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
         combatManager = GetComponent<CombatManager>();
-        statsManager = GetComponent<StatsManager>();
+        playerStatsManager = GetComponent<PlayerStatsManager>();
         playerinventoryManager = GetComponent<PlayerInventoryManager>();
 
     }

@@ -31,7 +31,7 @@ public class StatsManager : MonoBehaviour
     //죽음 관련//
     public bool isDead = false;
 
-    void Start()
+    protected virtual void Awake()
     {
         //초기화
         currentHealth = maxHealth;

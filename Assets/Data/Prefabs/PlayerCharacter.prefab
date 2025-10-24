@@ -180,9 +180,6 @@ PrefabInstance:
       addedObject: {fileID: 4645995654343200362}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f705363ced804e4fba9180728474dc8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4677641992468659868}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f705363ced804e4fba9180728474dc8, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7844896817405115960}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f705363ced804e4fba9180728474dc8, type: 3}
       insertIndex: -1
@@ -199,6 +196,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f705363ced804e4fba9180728474dc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6990639942484009133}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1f705363ced804e4fba9180728474dc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4654064239462794256}
     - targetCorrespondingSourceObject: {fileID: -2912091040194738010, guid: 1f705363ced804e4fba9180728474dc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2335578227514023026}
@@ -264,10 +264,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 0}
   animator: {fileID: 0}
+  statsManager: {fileID: 0}
   playerAnimatorManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
   combatManager: {fileID: 0}
-  statsManager: {fileID: 0}
+  playerStatsManager: {fileID: 0}
   playerinventoryManager: {fileID: 0}
 --- !u!143 &5765067733275576060
 CharacterController:
@@ -307,35 +308,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5885a93fc4d4fa4ea045ac1391f95d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4677641992468659868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8299658945224792851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 146f7b2b1c9824e4a88fa9cb05086ff8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  maxStamina: 10
-  maxFood: 100
-  currentHealth: 0
-  currentStamina: 0
-  currentFood: 0
-  currentShield: 0
-  currentArmor: 0
-  currentStrength: 0
-  currentCriticalChance: 0
-  currentAttackSpeed: 0
-  currentSpeed: 0
-  currentMaxHit: 0
-  HpGenerationRate: 0.01
-  StaminaGenerationRate: 0.01
-  FoodDecreaseRate: 0.1
-  isDead: 0
 --- !u!114 &7844896817405115960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,6 +451,35 @@ MonoBehaviour:
   leftHandSlot: {fileID: 0}
   rightHandWeaponModel: {fileID: 0}
   leftHandWeaponModel: {fileID: 0}
+--- !u!114 &4654064239462794256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8299658945224792851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21b329a4bff78499ad0a5b53d8a7cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  maxStamina: 10
+  maxFood: 100
+  currentHealth: 0
+  currentStamina: 0
+  currentFood: 0
+  currentShield: 0
+  currentArmor: 0
+  currentStrength: 0
+  currentCriticalChance: 0
+  currentAttackSpeed: 0
+  currentSpeed: 0
+  currentMaxHit: 0
+  HpGenerationRate: 0.1
+  StaminaGenerationRate: 0.1
+  FoodDecreaseRate: 0.1
+  isDead: 0
 --- !u!4 &8761255455720644350 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8756935645120169796, guid: 1f705363ced804e4fba9180728474dc8, type: 3}
