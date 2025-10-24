@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static SlotUI;
 
@@ -30,6 +31,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int inventoryRows = 3;
     [SerializeField] private int inventoryCols = 7;
     [SerializeField] private int quickSlotCount = 7;
+
 
     private InventorySlot[,] inventorySlots;
     private InventorySlot[] equipSlots;
@@ -75,7 +77,10 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject droppedItemPrefab; // 바닥에 드롭할 아이템 프리팹 (DroppedItem 포함)
     [SerializeField] private LayerMask groundLayer = 1 << 0; // 지면 레이어 마스크 (Default Layer = 0)
     [SerializeField] private LayerMask uiLayer = 1 << 5; // UI 레이어 마스크 (UI Layer = 5)
-    [SerializeField] private float dropDistance = 5f; // 드롭 Raycast 거리
+
+    [SerializeField] private Transform playerTransform; // 플레이어 Transform (아이템 드롭 위치 계산용)
+    [SerializeField] private float dropDistance = 1f; // 아이템 드롭 거리 (캐릭터 앞)
+    [SerializeField] private float dropHeight = 0.5f; // 아이템 드롭 높이 (바닥 위)
 
     protected virtual void Awake()
     {
@@ -90,10 +95,13 @@ public class InventoryManager : MonoBehaviour
 
         // 작업대 관련
         craftingManager = FindObjectOfType<CraftingManager>();
-        if (craftingManager == null) Debug.LogError("CraftingManager not found", this);
 
+        // 필수 컴포넌트 확인
+        if (slotUIPrefab == null) Debug.LogError("slotUIPrefab not assigned", this);
+        if (inventoryGrid == null) Debug.LogError("inventoryGrid not assigned", this);
         if (workbenchSlotUI == null) Debug.LogError("workbenchSlotUI not assigned", this);
         if (workbenchRecipe == null) Debug.LogError("workbenchRecipe not assigned", this);
+        if (playerTransform == null) Debug.LogError("playerTransform not assigned", this);
 
         // workbenchSlotUI의 Button onClick 설정 (인스펙터 대신 코드로)
         Button workbenchButton = workbenchSlotUI.GetComponent<Button>();
@@ -296,42 +304,65 @@ public class InventoryManager : MonoBehaviour
         draggedItemIcon.rectTransform.position = position;
     }
 
-    public void EndDragging(SlotUI sourceSlotUI)
+    public void EndDragging(SlotUI slotUI)
     {
-        // 화면 밖 드롭 확인 (초기화 전에 체크)
-        if (draggedSlot != null && draggedSlot.item != null)
+        if (draggedSlot == null || draggedSlot.item == null)
         {
-            // UI 슬롯 히트 확인
-            Vector3 mousePos = Input.mousePosition;
-            Ray ray = Camera.main.ScreenPointToRay(mousePos);
-            RaycastHit hit;
+            Debug.LogWarning("EndDragging: draggedSlot is null or empty");
+            draggedSlot = null;
+            draggedSlotUI = null;
+            return;
+        }
 
-            if (Physics.Raycast(ray, out hit, dropDistance, uiLayer))
+        // UI 밖 드롭 체크
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        bool droppedOnUI = results.Any(r => r.gameObject.GetComponent<SlotUI>() != null);
+
+        if (!droppedOnUI)
+        {
+            // 플레이어 앞에 3D 오브젝트 스폰
+            if (playerTransform != null && draggedSlot.item.droppedPrefab != null)
             {
-                // UI 슬롯: OnDrop에서 이미 처리됨
-                Debug.Log("Dropped on UI slot (handled in OnDrop)");
-            }
-            else if (Physics.Raycast(ray, out hit, dropDistance, groundLayer))
-            {
-                // 지면 드롭
-                Debug.Log($"Dropped {draggedSlot.item.itemName} to ground at {hit.point}");
-                DropItemToGround(hit.point, draggedSlot.item, draggedSlot.quantity);
+                Vector3 dropPos = playerTransform.position + playerTransform.forward * dropDistance + Vector3.up * dropHeight;
+                // 바닥 높이 조정 (레이캐스트로 지형 확인)
+                if (Physics.Raycast(dropPos, Vector3.down, out RaycastHit hit, 5f, LayerMask.GetMask("Ground")))
+                {
+                    dropPos.y = hit.point.y + dropHeight;
+                }
+                GameObject droppedObject = Instantiate(draggedSlot.item.droppedPrefab, dropPos, Quaternion.identity);
+                droppedObject.name = $"{draggedSlot.item.itemName}_Dropped";
+                // 물리 적용
+                Rigidbody rb = droppedObject.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.AddForce(playerTransform.forward * 1f, ForceMode.Impulse); // 살짝 밀기
+                }
+                Debug.Log($"Dropped {draggedSlot.item.itemName} at {dropPos}");
+
+                // 인벤토리에서 아이템 제거
+                RemoveItem(draggedSlot.item, draggedSlot.quantity);
             }
             else
             {
-                Debug.LogWarning("Drop failed: No valid hit");
+                Debug.LogWarning($"Cannot drop: playerTransform or droppedPrefab is null for {draggedSlot.item.itemName}");
             }
         }
 
-        // 상태 정리 (항상 실행)
-        draggedItemIcon.enabled = false;
         draggedSlot = null;
         draggedSlotUI = null;
-        isDragging = false;
+        UpdateAllSlots();
+    }
 
-        if (sourceSlotUI != null)
+    private void UpdateAllSlots()
+    {
+        foreach (var slotUI in slotUIs)
         {
-            Debug.Log("Ended dragging from " + sourceSlotUI.name);
+            slotUI.UpdateUI();
         }
     }
 

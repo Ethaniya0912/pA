@@ -6,10 +6,6 @@ using UnityEngine;
 //플레이어관리
 public class StatsManager : MonoBehaviour
 {
-    protected virtual void Awake()
-    {
-
-    }
     //최대 스탯//
     public float maxHealth = 100.0f;
     public float maxStamina = 10.00f;
