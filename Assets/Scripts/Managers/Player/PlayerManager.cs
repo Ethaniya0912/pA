@@ -8,7 +8,7 @@ public class PlayerManager : CharacterManager
     public PlayerAnimatorManager playerAnimatorManager;
     public PlayerLocomotionManager playerLocomotionManager;
     public CombatManager combatManager;
-    public StatsManager statsManager;
+    public PlayerStatsManager playerstatsManager;
     public PlayerInventoryManager playerinventoryManager;
 
     protected override void Awake()
@@ -20,7 +20,7 @@ public class PlayerManager : CharacterManager
         playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
         playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
         combatManager = GetComponent<CombatManager>();
-        statsManager = GetComponent<StatsManager>();
+        playerstatsManager = GetComponent<PlayerStatsManager>();
         playerinventoryManager = GetComponent<PlayerInventoryManager>();
 
     }
@@ -38,7 +38,7 @@ public class PlayerManager : CharacterManager
         // 움직임 조작
         playerLocomotionManager.HandleAllMovement();
         combatManager.HandleAllCombat();
-        statsManager.HandleAllStats();
+        playerstatsManager.HandleAllStats();
         playerinventoryManager.HandleAllInventorys();
     }
 }

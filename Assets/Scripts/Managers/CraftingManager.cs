@@ -39,7 +39,7 @@ public class CraftingManager : MonoBehaviour
 
     public void OpenCraftingUI()
     {
-        Debug.Log("Open Crafting UI");
+        //Debug.Log("Open Crafting UI");
         craftingUI.SetActive(true);
         SwitchTab(currentCategory);
     }
@@ -61,6 +61,14 @@ public class CraftingManager : MonoBehaviour
             Image img = preview.GetComponent<Image>();
             img.sprite = recipe.previewIcon;
 
+            // hover 이벤트 컴포넌트 추가 및 레시피 설정
+            RecipeHoverHandler hoverHandler = preview.GetComponent<RecipeHoverHandler>();
+            if (hoverHandler == null)
+            {
+                hoverHandler = preview.AddComponent<RecipeHoverHandler>(); // 컴포넌트 추가
+            }
+            hoverHandler.SetRecipe(recipe); // 여기서 호출: 레시피 데이터 전달
+
             // hover 이벤트: EventTrigger.Entry를 사용해 추가
             EventTrigger trigger = preview.GetComponent<EventTrigger>();
             if (trigger == null)
@@ -79,6 +87,13 @@ public class CraftingManager : MonoBehaviour
             exitEntry.eventID = EventTriggerType.PointerExit;
             exitEntry.callback.AddListener((data) => { hoverInfoText.text = ""; });
             trigger.triggers.Add(exitEntry);
+
+            // hover 이벤트 (IPointerEnterHandler 구현 가정)
+            IPointerEnterHandler enterHandler = preview.GetComponent<IPointerEnterHandler>();
+            if (enterHandler == null)
+            {
+                enterHandler = preview.AddComponent<RecipeHoverHandler>(); // 새 컴포넌트 추가 (아래)
+            }
 
             // 클릭 이벤트: 제작 (기존 코드 유지)
             Button button = preview.GetComponent<Button>();

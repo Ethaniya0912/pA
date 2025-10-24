@@ -19,3 +19,4 @@ MonoBehaviour:
   isCraftingMaterial: 1
   isCraftable: 0
   category: 0
+  itemDescription: Dumb stone
