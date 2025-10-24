@@ -6,8 +6,10 @@ using UnityEngine;
 //플레이어관리
 public class StatsManager : MonoBehaviour
 {
-    PlayerManager player;
+    protected virtual void Awake()
+    {
 
+    }
     //최대 스탯//
     public float maxHealth = 100.0f;
     public float maxStamina = 10.00f;
@@ -37,14 +39,12 @@ public class StatsManager : MonoBehaviour
         currentHealth = maxHealth;
         currentStamina = maxStamina;
         currentFood = maxFood;
-        player = GetComponent<PlayerManager>();
     }
 
     //PlayerManager에서 호출되는 함수//
-    public void HandleAllStats()
+    public virtual void HandleAllStats()
     {
-        UpdatePlayerStats();
-        RegenerateStats();
+        RegenerateStats(); 
         if (currentHealth <= 0)
         {
             Die();
@@ -58,18 +58,7 @@ public class StatsManager : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         Debug.Log(currentHealth);
     }
-    public void UpdatePlayerStats()
-    {
-        //점프나 대시할때 스테미나 감소
-        if (player.playerLocomotionManager.isDodge == true)
-        {
-            player.playerLocomotionManager.isDodge = false;
-            Debug.Log("Player : Dash");
-            Debug.Log(currentStamina);
-            currentStamina -= 1f;
-            currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
-        }
-    }
+
     public void RegenerateStats()
     {
         if(currentFood >= 0.0) // 포만감 상태일때 회복

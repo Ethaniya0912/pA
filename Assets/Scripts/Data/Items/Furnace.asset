@@ -19,3 +19,4 @@ MonoBehaviour:
   isCraftingMaterial: 0
   isCraftable: 1
   category: 2
+  itemDescription: abc

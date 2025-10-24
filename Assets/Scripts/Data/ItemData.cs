@@ -10,6 +10,7 @@ public class ItemData : ScriptableObject
     public bool isCraftingMaterial; // 크래프팅 재료로 사용 가능한지
     public bool isCraftable = false; // 제작 가능 여부
     public RecipeCategory category = RecipeCategory.Basic; // 레시피 카테고리
+    public string itemDescription; // 아이템 설명
 }
 
 public enum ItemType

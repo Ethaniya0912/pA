@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using static SlotUI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -14,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject equipPanel;     // 장착 슬롯 패널
     [SerializeField] private GameObject craftingPanel;  // 작업대 패널
     [SerializeField] private GameObject quickSlotPanel; // 퀵 슬롯 패널 (선택적 토글)
+    [SerializeField] private GameObject playerPanel;    // 플레이어 정보 패널 (모습, 체력, 스태미너 등)
 
     [Header("GridLayoutGroup 설정")]
     [SerializeField] private GridLayoutGroup inventoryGrid;
@@ -35,16 +39,35 @@ public class InventoryManager : MonoBehaviour
     private InventorySlot draggedSlot;
     private SlotUI draggedSlotUI;
 
+    private List<InventorySlot> slots = new List<InventorySlot>();
+    private List<SlotUI> slotUIs = new List<SlotUI>(); // 추가: SlotUI 관리 리스트
+
     private bool isInventoryOpen = false; // 인벤토리 UI 상태
     private bool isCraftingOpen = false; // 작업대 UI 상태
     private bool TabInput; // Tab 키 입력 플래그
     private bool KeyInteraction; // E 키 입력 플래그
+
+    // Player Stats UI
+    [Header("Player View")]
+    [SerializeField] private Camera playerViewCamera; // PlayerViewCamera
+    [SerializeField] private RawImage playerModelView; // Raw Image
+    [SerializeField] private RenderTexture playerViewTexture; // Render Texture
+
+    [Header("Stats UI")]
+    [SerializeField] private TextMeshProUGUI healthText; // "HP: 100/100"
+    [SerializeField] private TextMeshProUGUI staminaText; // "Stamina: 10/10"
+    [SerializeField] private TextMeshProUGUI foodText; // "Food: 100/100"
+    [SerializeField] private TextMeshProUGUI armorText; // "Armor: 10"
+    [SerializeField] private TextMeshProUGUI strengthText; // "Strength: 5"
+
+    [SerializeField] private PlayerStatsManager playerStatsManager; // 스탯 매니저
 
     // 작업대 관련
     [Header("Workbench Settings")]
     [SerializeField] private SlotUI workbenchSlotUI; // 작업대 슬롯
     [SerializeField] private Recipe workbenchRecipe; // 작업대 레시피
     [SerializeField] private GameObject workbenchPrefab; // 바닥에 설치할 작업대 프리팹
+    [SerializeField] private bool autoAddWorkbench = true; // 자동 인벤토리 추가 or 드래그
 
     [SerializeField] private CraftingManager craftingManager;
     private bool isDragging = false;
@@ -62,11 +85,26 @@ public class InventoryManager : MonoBehaviour
         InitializeQuickSlots();
         InitializeCraftingSlots();
         InitializeUI();
+        InitializeWorkbenchSlot();
 
 
         // 작업대 관련
         craftingManager = FindObjectOfType<CraftingManager>();
         if (craftingManager == null) Debug.LogError("CraftingManager not found", this);
+
+        if (workbenchSlotUI == null) Debug.LogError("workbenchSlotUI not assigned", this);
+        if (workbenchRecipe == null) Debug.LogError("workbenchRecipe not assigned", this);
+
+        // workbenchSlotUI의 Button onClick 설정 (인스펙터 대신 코드로)
+        Button workbenchButton = workbenchSlotUI.GetComponent<Button>();
+        if (workbenchButton != null)
+        {
+            workbenchButton.onClick.AddListener(OnWorkbenchClick);
+        }
+        else
+        {
+            Debug.LogError("workbenchSlotUI missing Button component", this);
+        }
     }
     
     //나중에 HandlerManager로 연동 예정
@@ -82,6 +120,7 @@ public class InventoryManager : MonoBehaviour
         HandleInteraction(); //E키 상호작용
         HandleExitCrafting(); //이동시 작업대 UI 닫기
         HandleExitInventory(); //이동시 인벤토리 UI 닫기
+        HandleStatsUI(); //플레이어 스탯 UI 갱신
     }
 
     private void InitializeGridLayout()
@@ -145,6 +184,9 @@ public class InventoryManager : MonoBehaviour
 
     private void InitializeUI()
     {
+        slots.Clear();
+        slotUIs.Clear(); // 리스트 초기화
+
         // 인벤토리 슬롯 UI
         for (int i = 0; i < inventoryRows; i++)
         {
@@ -152,7 +194,7 @@ public class InventoryManager : MonoBehaviour
             {
                 SlotUI slotUI = Instantiate(slotUIPrefab, inventoryGrid.transform);
                 slotUI.transform.name = $"InventorySlot_{i}_{j}";
-                Debug.Log(slotUI);
+                //Debug.Log(slotUI);
                 slotUI.Initialize(this, inventorySlots[i, j], SlotUI.SlotType.Inventory, -1, new Vector2Int(i, j));
             }
         }
@@ -169,27 +211,72 @@ public class InventoryManager : MonoBehaviour
             quickSlotUIs[i].Initialize(this, quickSlots[i], SlotUI.SlotType.Quick, i, Vector2Int.zero);
         }
 
-        /*
+
         // 작업대 슬롯 UI
-        for (int i = 0; i < craftingSlotUIs.Length; i++)
+        /*for (int i = 0; i < craftingSlotUIs.Length; i++)
         {
             craftingSlotUIs[i].Initialize(this, craftingSlots[i], SlotUI.SlotType.Crafting, i, Vector2Int.zero);
-        }
+        }*/
+
+
+        //resultSlotUI.Initialize(this, new InventorySlot(), SlotUI.SlotType.Crafting, -1, Vector2Int.zero);
         
 
-        resultSlotUI.Initialize(this, new InventorySlot(), SlotUI.SlotType.Crafting, -1, Vector2Int.zero);
-        */
-
         draggedItemIcon.enabled = false;
+    }
+    private void InitializeWorkbenchSlot()
+    {
+        if (workbenchSlotUI == null) return;
+
+        // Workbench 슬롯용 빈 InventorySlot 생성
+        InventorySlot workbenchSlotData = new InventorySlot
+        {
+            item = null, // 제작대는 표시용, 실제 아이템 없음
+            quantity = 0
+        };
+        workbenchSlotUI.Initialize(this, workbenchSlotData, SlotType.Workbench, -1, new Vector2Int(-1, -1));
+        slotUIs.Add(workbenchSlotUI); // 관리 리스트 추가
+        Debug.Log("Initialized WorkbenchSlotUI");
     }
 
     // 작업대 아이콘 클릭 시 (workbenchSlotUI의 onClick 이벤트로 연결)
     public void OnWorkbenchClick()
     {
-        if (HasMaterials(workbenchRecipe.requirements))
+        if (workbenchRecipe == null) return;
+
+        if (!HasMaterials(workbenchRecipe.requirements))
         {
-            ConsumeMaterials(workbenchRecipe.requirements);
-            StartDragging(new InventorySlot { item = workbenchRecipe.resultItem, quantity = 1 }, workbenchSlotUI);
+            Debug.LogWarning("Not enough materials for Workbench");
+            return; // UI 메시지 추가 추천
+        }
+
+        ConsumeMaterials(workbenchRecipe.requirements);
+
+        // 제작대 아이템 생성
+        ItemData workbenchItem = workbenchRecipe.resultItem;
+        if (workbenchItem == null)
+        {
+            Debug.LogError("Workbench resultItem is null", this);
+            return;
+        }
+
+        if (autoAddWorkbench)
+        {
+            bool added = AddItem(workbenchItem, 1); // 자동 인벤토리 추가
+            if (added)
+            {
+                Debug.Log("Crafted and added Workbench to inventory");
+            }
+            else
+            {
+                Debug.LogWarning("Inventory full – cannot add Workbench");
+            }
+        }
+        else
+        {
+            // 드래그 상태로 생성
+            StartDragging(new InventorySlot { item = workbenchItem, quantity = 1 }, workbenchSlotUI);
+            Debug.Log("Crafted Workbench and started dragging");
         }
     }
     public void StartDragging(InventorySlot slot, SlotUI slotUI)
@@ -501,7 +588,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (InputHandler.Instance.LeftClickInput)
         {
-            Debug.Log("you took apple");
+            //Debug.Log("you took apple");
             AddItem(itemApple,1);
         }
     }
@@ -519,18 +606,21 @@ public class InventoryManager : MonoBehaviour
         // E키로 작업대 UI 열기/닫기
         if (InputHandler.Instance.InteractInput)
         {
-            Debug.Log("E key pressed for interaction");
+            //Debug.Log("E key pressed for interaction");
             if (!isCraftingOpen)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit, 10f))
                 {
-                    Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
+                    //Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
                     if (hit.collider.gameObject.name == "Workbench") // 설치된 작업대 오브젝트
                     {
                         // 작업대 UI 열기
                         isCraftingOpen = true;
                         craftingManager.OpenCraftingUI();
+                        isInventoryOpen = true; // 인벤토리도 함께 열기
+                        inventoryPanel.SetActive(true);
+                        playerPanel.SetActive(false); // 작업대 열 때 플레이어 정보 패널 숨기기
                     }
                 }
             }
@@ -539,6 +629,8 @@ public class InventoryManager : MonoBehaviour
                 // 작업대 UI 닫기
                 isCraftingOpen = false;
                 craftingManager.CloseCraftingUI();
+                isInventoryOpen = false; // 인벤토리도 함께 닫기
+                inventoryPanel.SetActive(false);
             }
 
             // E키로 지면 아이템 줍기
@@ -563,12 +655,6 @@ public class InventoryManager : MonoBehaviour
     {
         if (isCraftingOpen)
         {
-            if (InputHandler.Instance.moveAmount > 0)
-            {
-                // 작업대 UI 닫기
-                isCraftingOpen = false;
-                craftingManager.CloseCraftingUI();
-            }
             if (InputHandler.Instance.isMoving)
             {
                 // 작업대 UI 닫기
@@ -579,31 +665,62 @@ public class InventoryManager : MonoBehaviour
     }
     private void HandleExitInventory()
     {
-        if (isInventoryOpen)
+        if (InputHandler.Instance.isMoving)
         {
-            if (InputHandler.Instance.isMoving)
-            {
-                // 인벤토리 UI 닫기
-                isInventoryOpen = false;
-                inventoryPanel.SetActive(false);
-                equipPanel.SetActive(false);
-                //craftingPanel.SetActive(false);
-                quickSlotPanel.SetActive(false);
-            }
+            // 인벤토리 UI 닫기
+            isInventoryOpen = false;
+            isCraftingOpen = false;
+            craftingManager.CloseCraftingUI();
+            inventoryPanel.SetActive(false);
+            equipPanel.SetActive(false);
+            craftingPanel.SetActive(false);
+            playerPanel.SetActive(false); 
         }
     }
     private void ToggleInventory()
     {
         isInventoryOpen = !isInventoryOpen;
+
+        if(!isInventoryOpen)
+        {
+            isCraftingOpen = false;
+            craftingManager.CloseCraftingUI();
+            craftingPanel.SetActive(false);
+        }
         Debug.Log(isInventoryOpen ? "Inventory Open" : "Inventory Close");
+
         inventoryPanel.SetActive(isInventoryOpen);
         equipPanel.SetActive(isInventoryOpen);
-        //craftingPanel.SetActive(isInventoryOpen);
-        quickSlotPanel.SetActive(isInventoryOpen);
+        playerPanel.SetActive(isInventoryOpen);
+        if(isCraftingOpen)
+        {
+            playerPanel.SetActive(false);
+            craftingManager.OpenCraftingUI();
+            craftingPanel.SetActive(true);
+        }
+        else
+        {
+            craftingManager.CloseCraftingUI();
+            craftingPanel.SetActive(false);
+        }
         if (isInventoryOpen)
         {
             UpdateUI();
         }
+    }
+
+    private void HandleStatsUI()
+    {
+        if (playerStatsManager == null)
+        {
+            Debug.LogError("HandlesStatsUI: playerStatsManager is null", this);
+            return;
+        }
+        healthText.text = $"HP: {playerStatsManager.currentHealth}/{playerStatsManager.maxHealth}";
+        staminaText.text = $"Stamina: {playerStatsManager.currentStamina}/{playerStatsManager.maxStamina}";
+        foodText.text = $"Food: {Math.Round(playerStatsManager.currentFood)}/{playerStatsManager.maxFood}";
+        armorText.text = $"Armor: {playerStatsManager.currentArmor}";
+        strengthText.text = $"Strength: {playerStatsManager.currentStrength}";
     }
 }
 

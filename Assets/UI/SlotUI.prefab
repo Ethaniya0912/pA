@@ -146,6 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 5764175310378607018}
   quantityText: {fileID: 2006605948647727927}
+  workbenchSprite: {fileID: 21300000, guid: 3dacb9e9d0b5b7041acaa91862b46b6c, type: 3}
 --- !u!1 &6442690573275024204
 GameObject:
   m_ObjectHideFlags: 0

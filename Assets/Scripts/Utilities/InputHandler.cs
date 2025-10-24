@@ -108,7 +108,7 @@ public class InputHandler : MonoBehaviour
     {
         if (LeftClickInput)
         {
-            Debug.Log("LeftClicked!");
+            //Debug.Log("LeftClicked!");
             LeftClickInput = false;
             // TODO: UI 윈도우가 열려있다면, 아무것도 안함.
 
