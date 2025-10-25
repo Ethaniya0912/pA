@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
+    public bool isDead = false;
+
     [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
     [HideInInspector] public StatsManager statsManager;

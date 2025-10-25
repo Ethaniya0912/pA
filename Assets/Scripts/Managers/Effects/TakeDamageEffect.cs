@@ -35,7 +35,11 @@ public class TakeDamageEffect : InstantCharacterEffect
 
     [Header("Sound FX")]
     public bool willPlayerDamageSFX = true;
-    public AudioClip elementDamageSoundFX;
+    public AudioClip elementDamageSoundFX; // 엘레멘트 데미지가 존재시 일반 sfx 위에 사용함
+
+    [Header("Direction Damage Take From")] // 뒤에서 때렸을 시, 애니메이션 재생을 앞으로 넘어지게끔 해줘야하는 등.
+    public float angleHitFrom;
+    public Vector3 contactPoint;           // 어디서 혈흔 효과가 발생하게 할건지 포인트 체크
 
     public override void ProcessEffect(CharacterManager character)
     {
