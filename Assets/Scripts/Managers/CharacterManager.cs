@@ -9,6 +9,7 @@ public class CharacterManager : MonoBehaviour
     [HideInInspector] public CharacterController characterController;
     [HideInInspector] public Animator animator;
     [HideInInspector] public StatsManager statsManager;
+    [HideInInspector] public CharacterEffectsManager characterEffectsManager;
 
     protected virtual void Awake()
     {
@@ -19,6 +20,7 @@ public class CharacterManager : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         statsManager = GetComponent<StatsManager>();
+        characterEffectsManager = GetComponent<CharacterEffectsManager>();
     }
 
     // Update is called once per frame
