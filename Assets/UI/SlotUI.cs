@@ -80,7 +80,7 @@ public class SlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
             {
                 itemIcon.sprite = null;
                 itemIcon.enabled = false;
-                Debug.Log($"SlotUI {gameObject.name}: Disabled itemIcon (empty slot)");
+                //Debug.Log($"SlotUI {gameObject.name}: Disabled itemIcon (empty slot)");
             }
             if (quantityText != null) quantityText.enabled = false;
         }
@@ -172,7 +172,7 @@ public class SlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         }
 
         tooltipManager.ShowTooltip(slot.item.itemName, slot.item.itemDescription, mousePos);
-        Debug.Log($"Hover on {gameObject.name}: {slot.item.itemName}"); // 디버깅 로그
+        //Debug.Log($"Hover on {gameObject.name}: {slot.item.itemName}"); // 디버깅 로그
     }
 
     // Hover 종료 (IPointerExitHandler 구현)

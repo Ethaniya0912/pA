@@ -6,7 +6,7 @@ public class TooltipManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tooltipTitle; // TooltipText
     [SerializeField] private TextMeshProUGUI tooltipText; // TooltipText
     [SerializeField] private CanvasGroup tooltipGroup; // 페이드 효과
-    [SerializeField] private float fadeSpeed = 0.2f; // 페이드 속도
+    //[SerializeField] private float fadeSpeed = 0.2f; // 페이드 속도
 
     private RectTransform tooltipRect; // 위치 조정용
 

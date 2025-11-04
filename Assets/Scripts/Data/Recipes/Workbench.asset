@@ -17,5 +17,5 @@ MonoBehaviour:
   resultItem: {fileID: 11400000, guid: 22354a94775b90142837928f6897adb7, type: 2}
   requirements:
   - item: {fileID: 11400000, guid: 16a85cfd3eb30c144811ebc6c4afea99, type: 2}
-    quantity: 10
+    quantity: 5
   category: 0

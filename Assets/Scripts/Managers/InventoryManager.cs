@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static SlotUI;
+using static UnityEditor.Progress;
+using InventorySystem; // DroppedItem 네임스페이스 추가
 
 public class InventoryManager : MonoBehaviour
 {
@@ -79,7 +81,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private LayerMask uiLayer = 1 << 5; // UI 레이어 마스크 (UI Layer = 5)
 
     [SerializeField] private Transform playerTransform; // 플레이어 Transform (아이템 드롭 위치 계산용)
-    [SerializeField] private float dropDistance = 1f; // 아이템 드롭 거리 (캐릭터 앞)
+    [SerializeField] private float dropDistance = 0.1f; // 아이템 드롭 거리 (캐릭터 앞)
     [SerializeField] private float dropHeight = 0.5f; // 아이템 드롭 높이 (바닥 위)
 
     protected virtual void Awake()
@@ -311,6 +313,8 @@ public class InventoryManager : MonoBehaviour
             Debug.LogWarning("EndDragging: draggedSlot is null or empty");
             draggedSlot = null;
             draggedSlotUI = null;
+            draggedItemIcon.enabled = false;
+            isDragging = false;
             return;
         }
 
@@ -328,22 +332,8 @@ public class InventoryManager : MonoBehaviour
             // 플레이어 앞에 3D 오브젝트 스폰
             if (playerTransform != null && draggedSlot.item.droppedPrefab != null)
             {
-                Vector3 dropPos = playerTransform.position + playerTransform.forward * dropDistance + Vector3.up * dropHeight;
-                // 바닥 높이 조정 (레이캐스트로 지형 확인)
-                if (Physics.Raycast(dropPos, Vector3.down, out RaycastHit hit, 5f, LayerMask.GetMask("Ground")))
-                {
-                    dropPos.y = hit.point.y + dropHeight;
-                }
-                GameObject droppedObject = Instantiate(draggedSlot.item.droppedPrefab, dropPos, Quaternion.identity);
-                droppedObject.name = $"{draggedSlot.item.itemName}_Dropped";
-                // 물리 적용
-                Rigidbody rb = droppedObject.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    rb.AddForce(playerTransform.forward * 1f, ForceMode.Impulse); // 살짝 밀기
-                }
-                Debug.Log($"Dropped {draggedSlot.item.itemName} at {dropPos}");
-
+                
+                DropItemToGround(draggedSlot.item, draggedSlot.quantity);
                 // 인벤토리에서 아이템 제거
                 RemoveItem(draggedSlot.item, draggedSlot.quantity);
             }
@@ -355,6 +345,8 @@ public class InventoryManager : MonoBehaviour
 
         draggedSlot = null;
         draggedSlotUI = null;
+        draggedItemIcon.enabled = false;
+        isDragging = false;
         UpdateAllSlots();
     }
 
@@ -366,43 +358,46 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    private void DropItemToGround(Vector3 position, ItemData item, int quantity)
+    private void DropItemToGround(ItemData item, int quantity)
     {
-        if (item == null)
-    {
-        Debug.LogError("DropItemToGround: ItemData is null", this);
-        return;
-    }
-    if (droppedItemPrefab == null)
-    {
-        Debug.LogError("DropItemToGround: droppedItemPrefab is null", this);
-        return;
-    }
-    if (draggedSlotUI == null || draggedSlotUI.Slot == null)
-    {
-        Debug.LogWarning("DropItemToGround: draggedSlotUI or slot is null – cannot clear original slot", this);
-        return;
-    }
+        if (playerTransform == null || item == null || item.droppedPrefab == null)
+        {
+            Debug.LogWarning($"DropItemToGround: Invalid parameters (playerTransform={playerTransform}, item={item?.itemName}, droppedPrefab={item?.droppedPrefab})");
+            return;
+        }
 
-    // 바닥 오브젝트 생성
-    GameObject droppedObj = Instantiate(droppedItemPrefab, position + Vector3.up * 0.1f, Quaternion.identity);
-    DroppedItem droppedItem = droppedObj.GetComponent<DroppedItem>();
-    if (droppedItem != null)
-    {
-        droppedItem.Initialize(item, quantity, this);
-        Debug.Log($"Created dropped item: {quantity} {item.itemName} at {position}");
-    }
-    else
-    {
-        Debug.LogError("DropItemToGround: DroppedItem component missing on prefab", this);
-    }
+        Vector3 dropPos = playerTransform.position + playerTransform.forward  * 0.1f * dropDistance + Vector3.up * dropHeight;
+        if (Physics.Raycast(dropPos, Vector3.down, out RaycastHit hit, 5f, LayerMask.GetMask("Ground")))
+        {
+            dropPos.y = hit.point.y + dropHeight;
+        }
 
-    // 원래 슬롯 비우기 (문제 해결)
-    draggedSlotUI.Slot.Clear(); // 슬롯 데이터 초기화
-    draggedSlotUI.UpdateUI(); // 원래 슬롯 UI 갱신 (아이콘/수량 사라짐)
+        GameObject droppedObject = Instantiate(item.droppedPrefab, dropPos, Quaternion.identity);
+        droppedObject.name = $"{item.itemName}_Dropped";
 
-    // 전체 UI 갱신 (안전성)
-    UpdateUI();
+        DroppedItem droppedItem = droppedObject.GetComponent<DroppedItem>();
+        if (droppedItem == null)
+        {
+            Debug.LogWarning($"DroppedItem component missing on {droppedObject.name}. Adding it.", droppedObject);
+            droppedItem = droppedObject.AddComponent<DroppedItem>();
+        }
+
+        droppedItem.itemData = item;
+        droppedItem.quantity = quantity;
+        Debug.Log($"Dropped {item.itemName} at {dropPos}, quantity = {quantity}, DroppedItem = {(droppedItem != null ? "set" : "null")}");
+
+        Rigidbody rb = droppedObject.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(playerTransform.forward * 1f, ForceMode.Impulse);
+        }
+
+        // 원래 슬롯 비우기 (문제 해결)
+        draggedSlotUI.Slot.Clear(); // 슬롯 데이터 초기화
+        draggedSlotUI.UpdateUI(); // 원래 슬롯 UI 갱신 (아이콘/수량 사라짐)
+
+        // 전체 UI 갱신 (안전성)
+        UpdateUI();
     }
 
 
@@ -665,20 +660,19 @@ public class InventoryManager : MonoBehaviour
             }
 
             // E키로 지면 아이템 줍기
-            if (Input.GetKeyDown(KeyCode.E))
+            // Raycast로 지면 아이템 히트
+            Ray ray1 = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray1, out RaycastHit hit1, 10.0f)) // 3m 거리
             {
-                // Raycast로 지면 아이템 히트
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit, 3f)) // 3m 거리
+                DroppedItem droppedItem = hit1.collider.GetComponent<DroppedItem>();
+                if (droppedItem != null)
                 {
-                    DroppedItem droppedItem = hit.collider.GetComponent<DroppedItem>();
-                    if (droppedItem != null)
-                    {
-                        // 픽업 로직은 DroppedItem.OnTriggerEnter에서 처리
-                        Debug.Log("E key hit on DroppedItem");
-                    }
+                    // 픽업 로직은 DroppedItem.OnTriggerEnter에서 처리
+                    Debug.Log("E key hit on DroppedItem");
+                    droppedItem.PickUp(this);
                 }
             }
+            
         }
     }
 

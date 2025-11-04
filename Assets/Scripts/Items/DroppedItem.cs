@@ -1,50 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DroppedItem : MonoBehaviour
+namespace InventorySystem // 네임스페이스 추가
 {
-    [SerializeField] private SpriteRenderer itemRenderer; // 아이템 스프라이트
-    [SerializeField] private Collider itemCollider; // Raycast 히트용 Collider
-
-    private ItemData item;
-    private int quantity;
-    private InventoryManager inventoryManager;
-
-    public void Initialize(ItemData newItem, int qty, InventoryManager manager)
+    public class DroppedItem : MonoBehaviour
     {
-        item = newItem;
-        quantity = qty;
-        inventoryManager = manager;
+        public ItemData itemData; // ItemData 필드 명확화
+        public int quantity; // public 접근 제어자
 
-        if (itemRenderer != null && item.icon != null)
+        private void Start()
         {
-            itemRenderer.sprite = item.icon;
+            Debug.Log($"DroppedItem initialized on {gameObject.name}, item = {itemData?.itemName ?? "null"}, quantity = {quantity}");
         }
-        if (itemCollider == null)
-        {
-            itemCollider = gameObject.AddComponent<BoxCollider>(); // 자동 Collider 추가
-            itemCollider.isTrigger = true;
-        }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player")) // 플레이어 태그 확인
+        public void PickUp(InventoryManager inventory)
         {
-            // E 키 누르면 픽업
-            if (Input.GetKeyDown(KeyCode.E) && inventoryManager != null)
+            if (inventory == null || itemData == null) return;
+            if (inventory.AddItem(itemData, quantity))
             {
-                bool pickedUp = inventoryManager.AddItem(item, quantity);
-                if (pickedUp)
-                {
-                    Debug.Log($"Picked up {quantity} {item.itemName}");
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    Debug.LogWarning("Inventory full, cannot pick up");
-                }
+                Debug.Log($"Picked up {quantity} {itemData.itemName}");
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.LogWarning($"Failed to pick up {quantity} {itemData.itemName}: Inventory full");
             }
         }
     }
