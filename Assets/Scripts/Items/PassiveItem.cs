@@ -8,7 +8,7 @@ public class PassiveItem : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"PassiveItem triggered by {other.gameObject.name}");
+        //Debug.Log($"PassiveItem triggered by {other.gameObject.name}");
         if (other.CompareTag("Player"))
         {
             PassiveInventoryManager passiveInventory = FindObjectOfType<PassiveInventoryManager>();

@@ -74,7 +74,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private bool autoAddWorkbench = true; // 자동 인벤토리 추가 or 드래그
 
     [SerializeField] private CraftingManager craftingManager;
-    private bool isDragging = false;
+    public bool isDragging = false;
 
     [SerializeField] private GameObject droppedItemPrefab; // 바닥에 드롭할 아이템 프리팹 (DroppedItem 포함)
     [SerializeField] private LayerMask groundLayer = 1 << 0; // 지면 레이어 마스크 (Default Layer = 0)

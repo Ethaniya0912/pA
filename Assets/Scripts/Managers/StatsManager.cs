@@ -128,16 +128,11 @@ public class StatsManager : MonoBehaviour
     // 스탯 업데이트 함수
     private void UpdateStats()
     {
-        Debug.Log("Updating stats with passive bonuses...");
-        // 예: 파워업 보너스 적용
+        //Debug.Log("Updating stats with passive bonuses...");
         maxHealth = baseHealth + GetBonus(PowerupType.MaxHP);
         maxStamina = baseStamina + GetBonus(PowerupType.MaxStamina);
         maxFood = baseFood; // 현재는 food 관련 파워업 없음
-        Debug.Log($"Before HpRegenRate: {HpRegenRate}");
-        Debug.Log($"Health Regen Bonus: {GetBonus(PowerupType.HealthRegen)}");
-        Debug.Log($"Base Health Regen: {baseHealthRegen}");
         HpRegenRate = baseHealthRegen + GetBonus(PowerupType.HealthRegen);
-        Debug.Log($"New HpRegenRate: {HpRegenRate}");
         StaminaRegenRate = baseStaminaRegen + GetBonus(PowerupType.StaminaRegen);
         currentShield = baseShield + GetBonus(PowerupType.Shield);
         currentArmor = baseArmor + GetBonus(PowerupType.Armor);
