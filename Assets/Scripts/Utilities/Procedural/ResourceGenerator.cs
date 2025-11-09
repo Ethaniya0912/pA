@@ -30,18 +30,41 @@ public class ResourceGenerator : MonoBehaviour
 
 
     List<Vector3> debugRayPositions = new List<Vector3>();
-    private void OnDrawGizmos()
-    {
-        if (!Application.isPlaying) return;
-
-        Gizmos.color = Color.red;
-        foreach (var pos in debugRayPositions)
+    /*    private void OnDrawGizmos()
         {
-            Gizmos.DrawLine(pos, pos + Vector3.down * 1000);
+            if (!Application.isPlaying) return;
+
+            Gizmos.color = Color.red;
+            foreach (var pos in debugRayPositions)
+            {
+                Gizmos.DrawLine(pos, pos + Vector3.down * 1000);
+            }
+        }*/
+
+    void Start()
+    {
+        if (resourcePrefabs == null || resourcePrefabs.Length == 0)
+        {
+            Debug.LogError("ResourceGenerator: resourcePrefabs is empty! Add prefabs in Inspector!", this);
+            return;
         }
+
+        random = new ConsistentRandom(GameManager.Instance.seed + 100);
+        totalWeight = 0f;
+        foreach (var w in resourcePrefabs)
+        {
+            if (w.prefab != null)
+                totalWeight += w.weight;
+        }
+
+        if (totalWeight <= 0f)
+        {
+            Debug.LogError("ResourceGenerator: totalWeight is 0! Check weights!", this);
+            return;
+        }
+
+        GenerateResources();
     }
-
-
     public void GenerateResources()
     {
         Debug.Log("Generating resources...");
@@ -69,7 +92,7 @@ public class ResourceGenerator : MonoBehaviour
             return;
         }
 
-        while (spawned < minSpawnAmount && attempts < 1000)
+        while (spawned < minSpawnAmount && attempts < 1)
         {
             attempts++;
             for (int z = 0; z < size; z += density)
@@ -79,7 +102,7 @@ public class ResourceGenerator : MonoBehaviour
                     if (height < minHeight || height > maxHeight) continue;
                     if (noiseMap[x, z] < spawnThreshold) continue;
 
-                    Vector3 worldPos = new Vector3(x - size / 2, 200, z - size / 2) * 12f;
+                    Vector3 worldPos = new Vector3(x - size / 2, 200, z - size / 2) * 1.0f;
                     // 스폰할 때마다
                     //debugRayPositions.Add(worldPos);
                     if (Physics.Raycast(worldPos, Vector3.down, out var hit, 1000f, terrainMask))
@@ -89,6 +112,7 @@ public class ResourceGenerator : MonoBehaviour
                         resources[chunk].Add(obj);
                         obj.SetActive(false);
                         spawned++;
+                        Debug.Log($"Resource spawned");
 
                     }
 
@@ -115,14 +139,24 @@ public class ResourceGenerator : MonoBehaviour
 
     GameObject FindWeighted(WeightedSpawn[] array)
     {
+        if (array == null || array.Length == 0)
+        {
+            Debug.LogError("FindWeighted: array is null or empty!");
+            return null;
+        }
+
         float roll = (float)random.NextDouble() * totalWeight;
-        float sum = 0;
+        float sum = 0f;
+
         foreach (var w in array)
         {
+            if (w.prefab == null) continue;
             sum += w.weight;
             if (roll <= sum) return w.prefab;
         }
+
+        // fallback
         return array[0].prefab;
     }
-    
+
 }

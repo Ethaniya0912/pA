@@ -536,7 +536,7 @@ GameObject:
   - component: {fileID: 179852653}
   - component: {fileID: 179852652}
   - component: {fileID: 179852651}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2634,7 +2634,7 @@ GameObject:
   - component: {fileID: 939249969}
   - component: {fileID: 939249968}
   - component: {fileID: 939249967}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Texture Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3775,7 +3775,7 @@ GameObject:
   - component: {fileID: 1227442001}
   - component: {fileID: 1227442000}
   - component: {fileID: 1227441999}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Map Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4618,7 +4618,7 @@ MonoBehaviour:
   resourceNoise: {fileID: 11400000, guid: 7ebba0b8484fd18448846510b92e5988, type: 2}
   terrainMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   density: 2
   spawnThreshold: 0.5
   minHeight: 0.35
@@ -4645,6 +4645,7 @@ MonoBehaviour:
   terrainMaterial: {fileID: 0}
   display: {fileID: 1227441999}
   levelOfDetail: 1
+  waterLevel: 0.35
 --- !u!114 &1478057691
 MonoBehaviour:
   m_ObjectHideFlags: 0
